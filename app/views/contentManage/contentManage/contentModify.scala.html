@@ -1,0 +1,494 @@
+@(content:models.Content,typeList:List[ColumnType],mobileList:List[Mobile], type_id: String,site:Site,mobilecontent_id:String,articleSourceList:List[ArticleSource],releasetime:String)
+@i = @{0}
+<style>
+*{
+margin: 0;
+padding: 0;
+}
+</style>
+	<script type="text/javascript" src="@routes.Assets.at("javascripts/easy-ui/js/jquery.easyui.min.js")"></script>
+	<script type="text/javascript" src="@routes.Assets.at("javascripts/easy-ui/js/easyui-lang-zh_CN.js")"></script>
+<div class="row">
+	<span style="color: black; font-weight: bold; font-size: 16px;">
+		<i class="fa fa-edit"></i>&nbsp;&nbsp;修改文章
+	</span> &nbsp;&nbsp;| <a class="btn" style="color: gray;"
+		onclick="ajaxLoad_index('content-body-div','columnTreeIndex',null,this)">
+		<i class="fa fa-reply"></i>&nbsp;&nbsp;返回文章列表
+	</a>
+	<hr style="border-bottom: 1px solid #89C4F4; margin-top: 5px;">
+	<form class="form-horizontal" id="myFormInput2" method="post" enctype="multipart/form-data">
+		<div class="form-body">
+			<div class="col-lg-9" style="margin-left:-25px;">
+					<div class="form-group">
+						<label class="col-md-2 control-label">栏目<span
+						class="required">*</span></label>
+						<div class="col-md-5">
+							@*<select id="selectAdd" required name="column_id" class="form-control" onchange="getCode()">
+								<option value="">-请选择-</option>
+								@for(temp <-typeList){
+									<optgroup name="@temp.code" label="@temp.name">
+										@for(column <-temp.columnList){
+											<option id="@column.id" value ="@column.id" @if(column.id.equals(content.column_id)){ selected="selected"}>@column.name</option>
+										}
+									</optgroup>
+								}
+							</select>*@
+						<select id="selectAdd" name="column_id" style="width: 200px;height: 30px" data-options="url:'selectColumnJsonTreeDep',method:'get',
+                            onSelect:function(node){
+                            var code= node.type_id;
+                            code=code.substr(0,3);
+                            selectOption(code);
+                           },onLoadSuccess:function(){
+							$('#selectAdd').combotree('setValue','@content.column_id');
+							}
+                        ">
+                        </select>
+						</div>
+
+						<label class="col-md-2 control-label">模板&nbsp;&nbsp;</label>
+						<div class="col-md-3">
+							<select class="form-control" name="mobile_id">
+								@for(mobile <-mobileList){
+									@if(mobile.id.equals(mobilecontent_id)){
+										<option value ="@mobile.id"	@if(mobile.id.equals(content.mobile_id)){ selected="selected" } >默认模版</option>
+									}else{
+										<option  value ="@mobile.id" @if(mobile.id.equals(content.mobile_id)){ selected="selected" }>@mobile.name</option>
+									}
+								}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">标题<span
+							class="required">*</span></label>
+						<div class="col-md-10">
+							<input id="title" type="text" value="@content.title" name="title" class="form-control" placeholder="标题" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">副标题&nbsp;&nbsp;</label>
+						<div class="col-md-5">
+							<input type="text" value="@content.subtitle"  name="subtitle" class="form-control" placeholder="副标题" />
+						</div>
+						<label class="col-md-2 control-label">文章来源</label>
+						<div class="col-md-3">
+							<select id="source" class="form-control" name="source_id" >
+								<option value ="" >-请选择-</option>
+								@for(articleSource <- articleSourceList) {
+									<option value ="@articleSource.id" @if(articleSource.id.equals(content.source_id)){selected="selected" } >@articleSource.name</option>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">外部链接&nbsp;&nbsp;</label>
+						<div class="col-md-10">
+							<input type="text" name="httpurl" value="@content.httpurl" class="form-control" placeholder="外部链接" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label">摘要&nbsp;&nbsp;</label>
+						<div class="col-md-10">
+							<textarea id="memo" rows="2" name="snippet" maxlength="100" class="form-control"
+								placeholder="摘要(最多输入100个字符)">@content.snippet</textarea>
+						</div>
+					</div>
+				<div class="form-group" id="files">
+					<label class="col-md-2 control-label">附件&nbsp;&nbsp;</label>
+					<div class="col-md-10">
+						<input id="fileupload" type="file" name="accessorys" value="@site.dns@content.attachmentPath" >
+					</div>
+				</div>
+				<div class="form-group" id="videos">
+					<label class="col-md-2 control-label">视频&nbsp;&nbsp;</label>
+					<div class="col-md-10">
+						<input id="fileupload" type="file" name="videos" @*data-url="server/php/"*@ >
+					</div>
+				</div>
+				<input id="oldId" type="hidden" name="oldId" value="@for(images <- content.imageList){@images.getString("id"),}"/>
+					<div  id="photos">
+						<label class="col-md-2 control-label">相册图集<span class="required">*</span></label>
+						<div class="col-md-10">
+							<div >
+								@if(content.imageList.size()>0){
+									@for(images <- content.imageList){
+											<div>
+												<input name="priority[]" value="@images.getString("priority")" style="width:35px" type="number"/>
+												<img class="imgClass" style="display:inline-block;width:120px;height: 120px;margin-top: 0px" src="@site.dns@images.getString("attachmentpath")" onclick="imgClick(this)"/>
+												<input class="fileClass" name="attachmentname" style="display: none" type="file" onchange="selectImage(this)" />
+												<textarea name="attachmentnews[]" style="vertical-align:middle;height: 100px;width:450px;" required >@images.getString("attachmentnews")</textarea>
+												<input type="button" onclick="addImg(this)" value="&nbsp;+&nbsp;"><input type='button' onclick='deleteImage(this)' style='width: 25px' value='-'/>
+												<input type="hidden" name="imageIds[]" value="@images.getString("id")"/>
+											</div>
+									}
+								}
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-2 control-label">内容<span
+						class="required">*</span></label>
+						<div class="col-md-10">
+							<script id="editor" name="content" type="text/plain" style="width:700px;height:500px;"></script>
+							<div class="row">&nbsp;</div>
+							<div class="row">&nbsp;</div>
+							<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+							<div class="row">&nbsp;</div>
+						</div>
+					</div>
+
+				</div>
+		</div>
+		<div class="col-lg-3">
+			<table class="table table-bordered">
+				<tr class="info">
+					<td><b>缩略图</b>
+						<input type="button"  style="float: right;" class="btn-circle btn-info btn-xs" value="取消" onclick="removeThumbnail()">
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<img src="
+							@if("".equals(content.thumbnail) || null == content.thumbnail){
+								@routes.Assets.at("images/picture.png")
+							} else{
+								@site.dns@content.thumbnail
+							}
+							" id="showImgEdit" style="width: 100px; height: 120px;cursor: pointer;" onclick="showFile()" />
+						<input type="file" name="thumbnail_" style="display: none;" id="fileEdit">
+					</td>
+				</tr>
+				<tr class="info">
+					<td><b>发布时间</b></td>
+				</tr>
+				<tr>
+					<td align="center"><div id='dateTimeInput'></div></td>
+				</tr>
+				<tr class="info">
+					<td><b>状态</b></td>
+				</tr>
+				<tr>
+					<td>&nbsp;&nbsp;<input name="stick" value="1" @if(content.stick=="1"){ checked="checked"} type="radio">推荐<br>
+							&nbsp;&nbsp;<input name="stick" value="0" @if(content.stick=="0"){ checked="checked"} type="radio">未推荐
+					</td>
+				</tr>
+				<tr>
+					<td>
+							&nbsp;&nbsp;<input name="audit" value="0" checked="checked" type="radio">@if(content.audit=="0"){待审核}@if(content.audit=="1"){审核通过}@if(content.audit=="2"){审核未通过}
+					</td>
+				</tr>
+				<tr>
+				@if(content.auditopinion!=null && !content.auditopinion.equals("")){
+					<tr class="info">
+						<td><b>审核未通过原因</b></td>
+					</tr>
+					<tr>
+						<td>
+							<span style="color: red;display: block;height: 80px">@content.auditopinion</span>
+						</td>
+					</tr>
+				}
+			</table>
+		</div>
+		<div class="form-actions">
+			<div class="col-md-offset-5 col-md-6" style="position: fixed;z-index: 1000;bottom: 26px;left:0px">
+				<input id="time" name="releasetimeString" type="hidden" value="@content.releasetime">
+				<input name="id" type="hidden" value="@content.id">
+				<input id="contentThumbnail" name="contentThumbnail" type="hidden" value="@content.thumbnail">
+				<input type="button" id="sub" class="btn green" value="提交并审核">
+				<input type="button" id="show"  onclick="return false"	class="btn yellow" value="预 览">
+				<input type="reset" class="btn default" onclick="ajaxLoad_index('content-body-div','columnTreeIndex',null,this)" value="关 闭">
+			</div>
+		</div>
+	</form>
+	<div class="row">&nbsp;</div>
+	<div class="row">&nbsp;</div>
+	<div class="row">&nbsp;</div><div class="row">&nbsp;</div>
+	<div class="row">&nbsp;</div>
+	<div class="container">
+		<div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+			<div class="modal-header"style="height: 30%;border: 0px;"></div>
+			<div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+				<p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    UE.delEditor("editor");
+	var editor = UE.getEditor('editor');
+	editor.addListener( 'ready', function( editor1) {
+	editor.setContent('@Html(content.content1)');
+	});
+	$(document).ready(function() {
+		var releasetime = '@releasetime';
+		var date = null
+		if(releasetime != "") {
+			var str=releasetime.toString();
+        	str = str.replace(/-/g,"/");
+        	date = new Date(str);
+		}
+
+
+         $("#dateTimeInput").jqxDateTimeInput({
+         	formatString: "yyyy-MM-dd HH:mm:ss",
+         	showTimeButton: true,
+         	theme: 'energyblue',
+         	value: date,
+         	width: '200px',
+         	height: '30px',
+         	readonly:true
+         });
+	});
+	$(function() {
+		$("#fileEdit").change(function() {
+			var files = $('#fileEdit').prop('files');//获取到文件列表
+			var strsrc = getObjectURL(this.files[0]);
+			if (strsrc == null) {
+				return false;
+			} else {
+				$("#showImgEdit").attr("src", strsrc);
+			}
+		});
+
+	});
+	//点击file框，弹出选择文件框
+	function showFile() {
+		$("#fileEdit").click();
+	}
+
+	//取消缩略图
+	function removeThumbnail(){
+		//清空缩略图路径
+		$('#contentThumbnail').val('');
+		$("#showImgEdit").attr('src','@routes.Assets.at("images/picture.png")');
+	}
+	$('#dateTimeInput').on('change', function (event){
+		$("#time").val($('#inputdateTimeInput').val());
+
+	});
+	$(function (){
+       $("#time").val($('#inputdateTimeInput').val());
+	   var type_id='@type_id';
+	   if(type_id=='133643B9709C41F8B2A529C177CD242C'){
+	      $('#files').hide();
+          $('#videos').hide();
+	   }else{
+	   	 selectOption(type_id);
+	   }
+	});
+
+	var url="";
+    //提交
+	$('#sub').click(function(){
+	     url='contentModify';
+	     $('#myFormInput2').submit();
+	});
+	//预览
+    $('#show').click(function(){
+	     url='contentShow';
+	     $('#myFormInput2').submit();
+	});
+
+    $('#myFormInput2').submit(function() {
+    	editor.sync();
+    	var idValue= $('#selectAdd').combo('getValue');
+       if(idValue==null||idValue==''){
+            tipInfo('栏目不能为空');
+            return false;
+       }
+	   if($('#title').val()==''){
+			tipInfo('标题不能为空');
+			return false;
+	   }
+
+    	if($('textarea[name="content"]').val()==""){
+           tipInfo('内容不能为空');
+           return false;
+        }
+        var hideNums=$("input[name='priority[]']");
+        for(var i=0;i<hideNums.length;i++){
+            for(var j=i+1;j<hideNums.length;j++){
+                if(hideNums[i].value==hideNums[j].value){
+                    tipInfo('图片序号不能重复');
+                    return false;
+                }
+            }
+        }
+        var attachmentTextAreas=$("textarea[name='attachmentnews[]']");
+        for(var i=0;i<attachmentTextAreas.length;i++){
+			 if(attachmentTextAreas[i].value==''){
+                    tipInfo('图片说明不能为空');
+                    return false;
+              }
+        }
+        var isSubmit=true;
+        var img=$('.imgClass');
+        for(var i=0;i<img.length;i++){
+            var src = $(img[i]).attr('src');
+            if(src.indexOf("images/picture.png")!=-1){
+                isSubmit=false;
+                break;
+            }
+        }
+        if(isSubmit==false){
+            tipInfo('图片未上传');
+            return false;
+        }
+        var time = new Date($("#time").val().replace(/-/g,"/"));
+        var now = new Date();
+        if(time - now < 0){
+            tipInfo('发布时间不能在当天之前');
+            return false;
+        }
+          if($("#showImgEdit").attr("src").lastIndexOf("/assets/images/picture.png") == '-1') {
+            if($("#memo").val().trim() == '') {
+                tipInfo('摘要不能为空！');
+                return false;
+            }
+        }
+    	 var options = {
+			url:url,
+			beforeSubmit:  showRequest,  //提交前处理
+			success:       showResponse,  //处理完成
+			resetForm: false,
+			dataType:  'text'
+	 	};
+	 	if(url != "contentShow") {
+	 		$("#loadingDiv").show();
+	 	}
+        $(this).ajaxSubmit(options);
+        return false;
+    });
+	function showRequest() {
+			//取出错误状态的控件的个数
+			var isNot = $("#myFormInput2").find(".form-group.has-error").length;
+			if (isNot == 0) {
+				$("#myFormInput2Error").hide();
+				return true;
+			} else {
+				$("#myFormInput2Error").show();
+				return false;
+			}
+		}
+
+	//提交表单后
+	function showResponse(result, statusText){
+		  if(result=='修改成功'){
+		  	 $("#loadingDiv").hide();
+		    tipInfo(result);
+		    ajaxLoad('content-body-div',"columnTreeIndex",null,this);
+	    }else {
+	        window.open(result);
+	    }
+	}
+
+    //根据选中的栏目列type_id显示对应的文件上传类型
+    function selectOption(code){
+        var attachmentname="";
+        var attachmentpath="";
+        switch(code){
+        case '6C6C05EB74584415AE607A5FE9C8062B':
+            $('#files').hide();
+           $('#photos').empty();
+            $('#videos').hide();
+            break;
+        case 'DBA383AFA57F47949F9628F94D48248E':
+           $('#photos').empty();
+            $('#files').hide();
+            $('#videos').show();
+          break;
+        case '133643B9709C41F8B2A529C177CD242C':
+            var str="<label class='col-md-2 control-label'>相册图集<span class='required'>*</span></label>";
+            str+=" <div class='col-md-10'>";
+            str+="<div<div><input name='priority[]' value='1' style='width:35px' type='number'/>";
+            str+="<img class='imgClass' style='display:inline-block;width:120px;height: 120px;margin-top: 0px' src='@routes.Assets.at("images/picture.png")' onclick='imgClick(this)'/>";
+            str+="<input class='fileClass' name='attachmentname' style='display: none' type='file' onchange='selectImage(this)'/>";
+            str+="<textarea name='attachmentnews[]' style='vertical-align:middle;height: 100px;width:450px;' required ></textarea>";
+            str+="<input type='button' onclick='addImg(this)' value='&nbsp;+&nbsp;'<input type='button' onclick='deleteImage(this)' style='width: 25px' value='-'/>";
+            str+=" </div></div></div>";
+            $('#photos').html(str).show();
+            $('#files').hide();
+            $('#videos').hide();
+            var values=$('#oldId').val();
+			values="change,";
+			$('#oldId').val(values);
+            break;
+        case 'C06C6E65B13D45A0B60B21D9E23143BE':
+            $('#files').show();
+           $('#photos').empty();
+            $('#videos').hide();
+            break;
+        default:
+            $('#files').hide();
+           $('#photos').empty();
+            $('#videos').hide();
+        }
+    }
+   function imgClick(img){
+        $(img).next().click();
+   }
+   //点击添加按钮生成图文
+   function addImg(btn){
+
+   var num=	$(btn).parent().children("input[name='priority[]']").val();
+   var index=parseInt(parseInt(num)+1);
+    var str="";
+    str+="<div><input value='"+index+"' style='width:35px' name='priority[]' type='number'/>&nbsp;";
+    str+="<img class='imgClass' style='display:inline-block;width:120px;height: 120px;margin-top: 0px' src='@routes.Assets.at("images/picture.png")' onclick='imgClick(this)'/>";
+    str+="<input class='fileClass' name='attachmentname' style='display: none' type='file' onchange='selectImage(this)'  />";
+    str+="&nbsp;<textarea name='attachmentnews[]' style='vertical-align:middle;height: 100px;width:450px;' required ></textarea>";
+    str+="&nbsp;<input type='button' onclick='addImg(this)'' value='&nbsp;+&nbsp;'/>&nbsp;<input type='button' onclick='deleteImage(this)' style='width: 25px' value='-'/>";
+    str+="<input type='hidden' name='imageIds[]' value=''/></div>";
+    $(btn).parent().parent().append(str);
+    var values=$('#oldId').val();
+    values=values+"change,";
+    $('#oldId').val(values);
+   }
+   //删除图文列表
+    function deleteImage(obj){
+        var hideId=$(obj).next().val();
+        var values=$('#oldId').val();
+	   	if(hideId!=''){
+			values=values.replace(hideId+",","");
+			$('#oldId').val(values)
+		}else{
+			values=values.substring(0,values.length-'change,'.length);
+			$('#oldId').val(values);
+		}
+        $(obj).parent().remove();
+    }
+	//获取本地图片显示
+	function getObjectURL(file) {
+		var url = null;
+		if (window.createObjectURL != undefined) { // basic
+			url = window.createObjectURL(file);
+		} else if (window.URL != undefined) { // mozilla(firefox)
+			url = window.URL.createObjectURL(file);
+		} else if (window.webkitURL != undefined) { // webkit or chrome
+			url = window.webkitURL.createObjectURL(file);
+		}
+		return url;
+	}
+	//选择图文
+	function selectImage(obj){
+        var files = $(obj).prop('files');//获取到文件列表
+        var strsrc = getObjectURL(obj.files[0]);
+        if (strsrc == null) {
+            return false;
+        } else {
+            $(obj).prev().attr("src", strsrc);
+            var hideId=$(obj).next().next().next().next().val();
+            var values=$('#oldId').val();
+            if(hideId!=''){
+            	values=values.replace(hideId,"change");
+            	$('#oldId').val(values)
+            }
+        }
+
+	}
+	$('#selectAdd').combotree({
+    });
+</script>

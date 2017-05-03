@@ -1,0 +1,89 @@
+@(columnList:List[Column],yearList:List[String])
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <label class="col-lg-5 control-label">年&nbsp;&nbsp;&nbsp;&nbsp份：</label>
+                    <div class="col-lg-7 input-group">
+                        <select class="form-control"  id="year">
+                            @for(year <-yearList){
+                                <option value="@year">@year</option>
+                            }
+                            </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="col-lg-5 control-label">栏&nbsp;&nbsp;&nbsp;&nbsp;目：</label>
+                    <div class="col-lg-7">
+                        <select id="column_id" name="column_id"  style="width: 100%;height: 35px;" data-options="url:'selectJsonTreeHasNullValue',method:'get',
+						onSelect:function(node){
+                            var id= node.id;
+                            $('#column_id').combotree('setValue',id);
+                            showContent();
+                           }
+                        ">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="col-lg-5 control-label">文&nbsp;&nbsp;&nbsp;&nbsp章：</label>
+                    <div class="col-lg-7 input-group">
+                        <select class="form-control"  id="content_id">
+                            <option value="">-请选择-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input type="button" onclick="search()" class="btn green btn-circle" value="查询">
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div  class="tab-content" id="commentContent">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $('#column_id').combotree({});
+	fixMenu();
+	var date=new Date();
+    var year=date.getFullYear();
+    $("#year").val(year);
+	privateAjaxLoad('commentContent','commentCountList',null,this,null);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	if(animate!=null){
+		$('#'+targetDiv).removeClass('animated bounceIn').hide();
+		$('#'+targetDiv).addClass('animated bounceIn').show();
+
+	}
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+function search(){
+    var column_id=$('#column_id').combotree("getValue");
+    var year=$("#year").val();
+    var content_id=$('#content_id').val();
+    var param='column_id='+column_id+'&year='+year+'&content_id='+content_id;
+    privateAjaxLoad('commentContent','commentCountList?'+param,null,this,null);
+ }
+ function showContent(){
+    var column_id=$('#column_id').combotree("getValue");
+    $.post('linkageContentList',{'column_id':column_id},function(data){
+        var obj=eval('('+data+')');
+        $("#content_id").html('<option value="">-请选择-</option>');
+        for(var i=0;i<obj.length;i++){
+            var content=obj[i];
+            var str='<option value="'+content.id+'">'+content.title+'</option>';
+            $("#content_id").append(str);
+        }
+    });
+ }
+
+</script>

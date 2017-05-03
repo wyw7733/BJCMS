@@ -1,0 +1,66 @@
+@import com.avaje.ebean.SqlRow
+@(path:String,contentStatisticslist:List[SqlRow],searchMap:Map[String,String])
+<div class="row">
+    <div class="col-lg-12">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr class="info">
+                        <th style="width: 70%">栏目名称</th>
+                        <th style="width: 30%" id="views_title">
+                            @if("/columnViews".equals(path)){
+                                总访问量
+                            }
+                            @if("/columnViewsday".equals(path)){
+                                日访问量
+                            }
+                            @if("/columnViewsweek".equals(path)){
+                                周访问量
+                            }
+                            @if("/columnViewsmonth".equals(path)){
+                                月访问量
+                            }
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                   @for(sqlrow <- contentStatisticslist){
+                        <tr>
+                            <td>@sqlrow.get("name")</td>
+                            <td class="views td_list">
+                                @if("/columnViews".equals(path)){
+                                    @if(null==sqlrow.get("views")||sqlrow.get("views").equals("")){
+                                        0
+                                    }else{
+                                        @sqlrow.get("views")
+                                    }
+                                }
+                                @if("/columnViewsday".equals(path)){
+                                    @if(null==sqlrow.get("viewsday")||sqlrow.get("viewsday").equals("")){
+                                        0
+                                    }else{
+                                        @sqlrow.get("viewsday")
+                                    }
+                                }
+                                @if("/columnViewsweek".equals(path)){
+                                    @if(null==sqlrow.get("viewsweek")||sqlrow.get("viewsweek").equals("")){
+                                        0
+                                    }else{
+                                        @sqlrow.get("viewsweek")
+                                    }
+                                }
+                                @if("/columnViewsmonth".equals(path)){
+                                    @if(null==sqlrow.get("viewsmonth")||sqlrow.get("viewsweek").equals("")){
+                                        0
+                                    }else{
+                                        @sqlrow.get("viewsmonth")
+                                    }
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                   <tr><td colspan="3"></td></tr>
+                </tbody>
+            </table>
+    </div>
+</div>

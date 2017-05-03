@@ -1,0 +1,83 @@
+<style type="text/css">
+	.a-gray {
+		color: gray;
+	}
+</style>
+<div class="row">
+	<div class="col-lg-12">
+		<a class="btn default" onclick="privateAjaxLoad('mobile_content','toMobileAdd', null, this)">
+			<i class="fa fa-plus-square"></i>&nbsp;&nbsp;创建模板
+		</a>
+		<a id="" class="btn default" href="javascript:deleteMobile()">
+			<i class="fa fa-trash-o"></i>&nbsp;&nbsp;删除模板
+		</a>
+
+	</div>
+	<input type="hidden" id="filePath">
+	<div id="mobile_content" class="col-lg-12"></div>
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		fixMenu();
+		privateAjaxLoad('mobile_content','mobileList?path=',null, this);
+	});
+	function privateAjaxLoad(targetDiv, url, data, obj) {
+		ajaxLoad(targetDiv, url, data, obj);
+		$(obj).parent('li').addClass('active').siblings().removeClass('active');
+	}
+	function navAjaxLoad(targetDiv, url, data, obj) {
+		$('#back').hide();
+		$("#allFile").nextAll().remove();
+		ajaxLoad(targetDiv, url, data, obj);
+		$(obj).parent('li').addClass('active').siblings().removeClass('active');
+	}
+
+	function submitAjax(url,formId){
+	    $.post(url,$('#'+formId).serialize(),function (data){
+           tipInfo(data);
+           privateAjaxLoad('mobile_content','mobileList?path=',null, this);
+	    });
+	}
+	function deleteMobile(){
+
+		var paths="";
+		var oldPath=$('#oldPath').val();
+		if(oldPath!=null&&oldPath!=""){
+			paths=oldPath;
+		}else{
+			var select=$('.selectBox');
+			if(select!=null && select.length>0){
+				for(var i=0;i<select.length;i++){
+					if(select[i].checked){
+						paths+=select[i].value+"-";
+					}
+				}
+				paths=paths.substring(0,paths.length-1);
+			}
+		}
+		var ids=getCheckedIds();
+        if(ids==null||ids==''){
+             tipInfo("请选择一行记录");
+        }else{
+			bootbox.confirm("确定删除?", function(result){
+				if(result){
+					$.post('mobileDelete',{'paths':paths},function (data){
+						 tipInfo('删除成功');
+						privateAjaxLoad('mobile_content','mobileList?path=',null, this);
+					});
+				}
+			});
+		}
+	}
+
+	//获取选中的id
+	function getCheckedIds(){
+	    var ids="";
+        $("input[name='checkbox']:checkbox").each(function(){
+            if($(this).attr("checked")){
+                ids += $(this).val()+","
+            }
+        });
+	    return ids;
+	}
+</script>

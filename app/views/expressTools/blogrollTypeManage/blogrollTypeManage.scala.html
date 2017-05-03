@@ -1,0 +1,64 @@
+@(bgtList:List[BlogrollType])
+<div class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" id="addBtn" style="float: right;margin-bottom: 5px;"
+        href="javascript:privateAjaxLoad('blogrollContent','toBlogrollTypeAdd',null,this);">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;添加
+        </a>
+        <table class="table table-bordered">
+            <thead>
+                <th width="72%">名称</th>
+                <th width="10%">排序</th>
+                <th width="18" align="center">操作</th>
+            </thead>
+            <tbody>
+                @for(bgType <-bgtList){
+                    <tr>
+                        <td>@bgType.name</td>
+                        <td>@bgType.priority</td>
+                        <td  align="center"><a href="javascript:privateAjaxLoad('blogrollContent','toBlogrollTypeModify',{'id':'@bgType.id'},this,null);">编辑</a>
+                            |<a onclick="deleteBlogrollType('@bgType.id')"> 删除</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+	$(function(){
+		 var options = {
+				url:'blogrollTypeAdd',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+			 $(this).ajaxSubmit(options);
+			 return false;
+		});
+	});
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		privateAjaxLoad('blogrollContent','blogrollTypeList',null,this);
+	}
+	function showMyForm(){
+		$("#addBtn").toggle('slow');
+		$("#myFormInput2").toggle('slow');
+	}
+	function deleteBlogrollType(id){
+        bootbox.confirm("确定删除?", function(result){
+               if(result==true){
+                   $.post('blogrollTypeDelete',{'id':id},function(data){
+                       tipInfo(data);
+                       privateAjaxLoad('blogrollContent','blogrollTypeList',null,this);
+                   });
+               }
+         });
+	}
+</script>
+
+
+

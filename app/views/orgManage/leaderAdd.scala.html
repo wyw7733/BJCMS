@@ -1,0 +1,84 @@
+@(organization:Organizations,leader:Leader,site:Site)
+<div class="row">
+	<div class="col-lg-12">
+		<hr style="border-bottom: 1px solid #89C4F4; margin-top: 5px;">
+		<div class="row">
+			<input type="hidden" value="@organization.id" name="org_id">
+			<input type="hidden" value="@leader.id" id="leaderIdtest">
+			@if(leader.id!=null){
+				<input name="id" value="@leader.id" type="hidden">
+			}
+			<div class="form-group">
+
+				<label class="col-md-2 control-label" style="margin-top:9%;">姓名</label>
+				<div class="col-md-4" style="margin-top:9%;">
+					<input type="text" name="name"  id="leadName" class="form-control" value="@if(leader.name!=null) {@leader.name}" placeholder="姓名" />
+				</div>
+
+				<div class="col-md-2" style="padding-left:5%;">
+					<input type="file" name="photo" id="fileEdit" style="display: none;">
+					<img style="float: left;"
+					id="showImgEdit" width="120px" height="150px"
+					src="@if(null==leader.photo||"".equals(leader.photo)){
+						@routes.Assets.at("theme/assets/global/img/login-user.png")
+					} else{
+						@site.dns@leader.photo
+					}"><br>
+					<a style="width:120px;" class="btn btn-info btn-xs" onclick="showFile()">点击上传照片</a>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-2 control-label">职务</label>
+				<div class="col-md-6">
+					<input type="text" name="post"  class="form-control" value="@if(leader.post!=null){@leader.post}" placeholder="职务" />
+				</div>
+			</div>
+			<div class="form-group">
+			   @if(organization.id == "1E3148A137A947319E33EDE8F826DDFE"){
+				   <label class="col-md-2 control-label">下属</label>
+			   } else {
+				<label class="col-md-2 control-label">下属部门</label>
+			   }
+
+				<div class="col-md-6">
+					<input type="text" name="subordinate" class="form-control" value="@if(leader.subordinate!=null) {@leader.subordinate}" placeholder="下属" />
+				</div>
+			</div>
+			<!--<div class="form-group">
+				<label class="col-md-2 control-label">职责</label>
+				<div class="col-md-6">
+					<textarea  type="text" name="duty" rows="5"   class="form-control" placeholder="职责" >@if(leader.duty!=null) {@leader.duty}</textarea>
+				</div>
+			</div>
+			-->
+		</div>
+
+	</div>
+</div>
+<div class="container">
+	<div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+		<div class="modal-header"style="height: 30%;border: 0px;"></div>
+		<div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+			<p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+		</div>
+	</div>
+</div>
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+$(function(){
+$("#leaderId").val($("#leaderIdtest").val());
+$("#fileEdit").change(function() {
+	var files = $('#fileEdit').prop('files');//获取到文件列表
+	var strsrc = getObjectURL(this.files[0]);
+	if (strsrc == null) {
+		return false;
+	} else {
+		if(checkImg()){
+			$("#showImgEdit").attr("src", strsrc);
+		}
+	}
+});
+
+
+})
+</script>

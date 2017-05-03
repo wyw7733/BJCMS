@@ -1,0 +1,128 @@
+@(user:AdminUser,site:Site)
+<div class="row">
+	<div class="col-md-12">
+		<form class="form-horizontal" id="myFormInput2" method="post" enctype="multipart/form-data">
+			<div class="row">&nbsp;</div>
+			<div class="row">&nbsp;</div>
+			<div class="row" style="margin-left: 30px">
+				<input type="submit" class="btn btn-circle blue btn-sm" value="保存">
+			</div>
+			<div class="row">&nbsp;</div>
+			<input type="hidden" name="id" value="@user.id">
+			<input type="file" name="image" id="fileEdit" style="display: none;">
+			<div class="row">
+					<img style="float: left;margin-left: 30%;"
+					id="showImgEdit" class="img-circle" width="120px" height="120px"
+					src="
+					@if(null==user.image||"".equals(user.image)){
+						@routes.Assets.at("theme/assets/global/img/login-user.png")
+					} else{
+						@site.dns@user.image
+					}
+				">
+					<a style="float: left;margin-left: 5%;margin-top: 98px;" class="btn btn-info btn-xs" onclick="showFile()">更改头像</a>
+			</div>
+			<div class="row">&nbsp;</div>
+			<div class="form-group">
+				<label  class="col-xs-3 control-label"></label>
+				<div class="input-group col-xs-7">
+					<span id="imgWarning" style="color:#9F0000;"> &nbsp;</span>
+				</div>
+			</div>
+			<div class="row">&nbsp;</div>
+			<div class="form-group">
+				<label  class="col-xs-4 control-label">姓名<span
+				class="required">*</span></label>
+				<div class="input-group col-xs-7">
+					<input type="text" name="tname" required value="@user.tname" class="form-control" placeholder="姓名">
+					<span class="help-block" > &nbsp;</span>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<label  class="col-xs-4 control-label">电话&nbsp;&nbsp;</label>
+				<div class="input-group col-xs-7">
+					<input type="text" name="tel"  value="@user.tel"  class="form-control" placeholder="电话">
+				</div>
+			</div>
+			<div class="form-group">
+				<label  class="col-xs-4 control-label">邮箱&nbsp;&nbsp;</label>
+				<div class="input-group col-xs-7">
+					<input type="text" name="mail"  value="@user.mail" class="form-control" placeholder="邮箱">
+				</div>
+			</div>
+
+
+
+
+		</form>
+	</div>
+</div>
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+var trueImg=true;
+	$(function(){
+		$("#fileEdit").change(function() {
+			var files = $('#fileEdit').prop('files');//获取到文件列表
+			var strsrc = getObjectURL(this.files[0]);
+			if (strsrc == null) {
+				return false;
+			} else {
+				$("#showImgEdit").attr("src", strsrc);
+			}
+			checkImg();
+		});
+		 var options = {
+				url:'userInfoModify',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+			if(trueImg==false){
+				return false;
+			}
+			console.log($("#fileEdit").val());
+			 $(this).ajaxSubmit(options);
+				 return false;
+		 });
+	});
+	//提交表单后处理
+	function showResponse(result, statusText){
+		tipInfo(result);
+		if(result=='修改成功！'){
+			$("#adminUserImg").attr("src",$("#showImgEdit").attr("src"));
+			$("#personalInfo").click();
+		}
+	}
+	//点击file框，弹出选择文件框
+	function showFile() {
+		$("#fileEdit").click();
+	}
+	//获取本地图片显示
+	function getObjectURL(file) {
+		var url = null;
+		if (window.createObjectURL != undefined) { // basic
+			url = window.createObjectURL(file);
+		} else if (window.URL != undefined) { // mozilla(firefox)
+			url = window.URL.createObjectURL(file);
+		} else if (window.webkitURL != undefined) { // webkit or chrome
+			url = window.webkitURL.createObjectURL(file);
+		}
+		return url;
+	}
+	//判断图片格式是否正确
+	function checkImg(){
+		var filepath=$("#fileEdit").val();
+		var extStart=filepath.lastIndexOf(".");
+		var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+		if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+			$("#imgWarning").html("不是有效的图片格式！");
+			trueImg=false;
+		}else{
+			$("#imgWarning").html("&nbsp;");
+			trueImg=true;
+		}
+	}
+</script>

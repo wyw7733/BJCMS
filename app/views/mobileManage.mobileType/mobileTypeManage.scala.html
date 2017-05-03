@@ -1,0 +1,87 @@
+@(mobileTypeList: List[MobileType],query:String)
+
+        <div class="input-group" style="margin-top: 3px;width: 30%;">
+            <input type="text" class="form-control"  id="query" placeholder="请输入关键字" value="@query">
+            <a class="input-group-addon input-left" onclick="mobileTypeFind()"> <i class="fa fa-search"></i>
+            </a>
+        </div>
+        <div style="border: 1px solid #DDDDDD; width: 100%;margin-top: 10px;">
+            <table class="table table-striped">
+                <thead>
+                    <tr bgcolor="#DDDDDD">
+                        <th><input onchange="allcheck(this)" type="checkbox">&nbsp;&nbsp;名称</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(tp <- mobileTypeList) {
+                        <tr>
+                            <td><input name="checkbox" type="checkbox" value="@tp.id">
+                                    &nbsp;&nbsp;<a onclick="privateAjaxLoad('mobile_content','toMobileTypeModify?id=@tp.id', null, this)" class="a-black">@tp.name</a></td>
+                            <td>@tp.memo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a id="" style="width: 100%;display: none;" class="btn btn-info"
+        href="javascript:void(0)">点击加载更多 &nbsp;&nbsp;<i class="fa fa-plus"></i>
+        </a>
+<script>
+$(document).ready(function() {
+	$("#deleteBtn").attr("disabled",false);
+});
+
+    var id=null;
+    function setId(typeId,obj){
+        if($(obj).attr("checked")){
+            id=typeId;
+            $('input[type=checkbox]').attr('checked',false);
+            $(obj).attr('checked',true);
+        }else{
+            id=null;
+        }
+    }
+    //删除
+    function deleteType(){
+        var ids=getCheckedIds();
+        if(ids==null||ids==''){
+             tipInfo("请选择一行记录");
+        }else{
+            bootbox.confirm("确定删除?", function(result){
+                if(result==true){
+                    $.post('mobileTypeDelete',{'ids':ids},function(data){
+                    tipInfo(data);
+                    ajaxLoad_index('content-body-div','mobileTypeIndex',null,this);
+                 });
+            }
+        });
+        }
+    }
+    function toModify(){
+         if(id==null){
+            alert("请选择要修改的记录");
+        }else{
+            privateAjaxLoad('mobile_content','toMobileTypeModify?id='+id, null, this)
+        }
+    }
+    function mobileTypeFind(){
+     privateAjaxLoad('mobile_content','find?query='+$('#query').val(), null, this);
+    }
+
+    //全选、取消全选
+	function allcheck(obj){
+	    var ischeck=$(obj).is(':checked');
+        $('input:checkbox').attr("checked",ischeck);
+	}
+	//获取选中的id
+	function getCheckedIds(){
+	    var ids="";
+        $("input[name='checkbox']:checkbox").each(function(){
+            if($(this).attr("checked")){
+                ids += $(this).val()+","
+            }
+        });
+	    return ids;
+	}
+</script>

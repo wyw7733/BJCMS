@@ -1,0 +1,45 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom tabbable-full-width portlet light" >
+            <ul id="enterpriseUl" class="nav nav-tabs">
+                <li class="active">
+                    <a onclick="privateAjaxLoad('content','staticHtml',null,this);" href="javascript:void(0);">
+					生成首页
+                    </a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('content','staticColumn',null,this);" href="javascript:void(0);">
+					生成栏目</a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('content','staticContent',null,this);"  href="javascript:void(0);">
+					生成内容</a>
+                </li>
+            </ul>
+            <div  class="tab-content">
+                <div id="content" style="padding:10px">
+				</div>
+            </div>
+        </div>
+        <div class="container">
+            <div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+                <div class="modal-header"style="height: 30%;border: 0px;"></div>
+                <div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+                    <p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	fixMenu();
+	privateAjaxLoad('content','staticHtml',null,this,true);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+
+</script>

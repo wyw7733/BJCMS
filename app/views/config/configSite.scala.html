@@ -1,0 +1,174 @@
+@(site:Site)
+<div class="row">
+    <div class="col-md-12">
+            <!-- 列表开始-->
+        <div class="portlet-body" id="enterpriseForm">
+            <form id="myFormInput2" class="form-horizontal" method="post">
+                    <!--表单主体-->
+                <input type="hidden" name="id" value="@site.id">
+                <div class="form-body">
+                        <i class="fa fa-gift font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp bold">基本信息</span>
+                    <hr>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">站点名称<span
+                        class="required">*</span></label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="name" placeholder="站点名称" required value="@site.name" />
+                            </div>
+                            <span class="help-block">提示信息</span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">站点简称&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="memo" placeholder="站点简称"  value="@site.memo" />
+                            </div>
+                        </div>
+                        <label class="control-label col-md-2">站长邮箱&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="email" class="form-control input-right"
+                            name="siteemail" placeholder="站长邮箱" value="@site.siteemail" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">域名&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="dns" placeholder="域名" value="@site.dns" />
+                            </div>
+                        </div>
+                        <label class="control-label col-md-2">统计代码&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="statisticscode" placeholder="统计代码"  value="@site.statisticscode" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">后台地址&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="manage_url" placeholder="后台地址" value="@site.manage_url" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">备案信息&nbsp;&nbsp;</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="bamemo" placeholder="备案信息" value="@site.bamemo" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">版权信息&nbsp;&nbsp;</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="copyright" placeholder="版权信息" value="@site.copyright" />
+                            </div>
+
+                        </div>
+                    </div>
+                        <i class="fa fa-gift font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp bold">SEO信息</span>
+                    <hr>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">SEO标题&nbsp;&nbsp;</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="seotitle" placeholder="SEO标题"  value="@site.seotitle" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">SEO关键字&nbsp;&nbsp;</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="seokey" placeholder="SEO关键字" value="@site.seokey" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="control-label col-md-2">SEO描述&nbsp;&nbsp;</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon input-left"> <i
+                                class="fa fa-edit"></i>
+                                </span> <input type="text" class="form-control input-right"
+                            name="seomemo" placeholder="SEO描述" value="@site.seomemo" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                    <!--表单尾部-->
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-7">
+                            <input id="sub" type="submit" class="btn green" value="提交"> <input
+                        type="reset" class="btn default" value="取 消">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+	$(function(){
+		 var options = {
+				url:'siteUpdate',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+			 $(this).ajaxSubmit(options);
+			 return false;
+		});
+	});
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		if(result=="保存成功！"){
+			privateAjaxLoad('configContent','siteInfo',null,this,true);
+		}
+	}
+</script>

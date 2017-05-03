@@ -1,0 +1,124 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom tabbable-full-width portlet light" style="min-height:500px">
+            <ul id="enterpriseUl" class="nav nav-tabs">
+                <li class="active">
+                    <a onclick="privateAjaxLoad('role_Content','roleList',null,this,null);" href="javascript:void(0);">
+					角色管理
+                    </a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('role_Content','toRoleAdd',null,this,null);" href="javascript:void(0);">
+					添加角色</a>
+                </li>
+
+            </ul>
+            <div  class="tab-content" id="role_Content">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	fixMenu();
+	privateAjaxLoad('role_Content','roleList',null,this,null);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	if(animate!=null){
+		$('#'+targetDiv).removeClass('animated bounceIn').hide();
+		$('#'+targetDiv).addClass('animated bounceIn').show();
+
+	}
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+
+</script>
+
+@* 权限设置 div*@
+<div class="container">
+    <div id="authorityTreeDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+        <div class="modal-header"style="height: 10%;border: 0px;"></div>
+        <div class="modal-body" style="background: white;border: 5px powderblue solid;width:40%;height: 65%; margin: auto;padding: 0px;">
+            <div class="alert alert-info" role="alert" style="width: 100%;">
+                <span style="font-weight: bold;font-size: 20px;">权限设置 :&nbsp;&nbsp;<span id="smallTitle" style="color: darkslategray;"></span></span>
+            </div>
+            <input id="id" type="hidden">
+            <div style="height:73%;width: 85%;overflow-x: auto;overflow-y: auto;margin: auto;border: 2px skyblue dotted;">
+                <div id="authorityTree" class="tree-demo" style="width: 100%;margin: auto;"></div>
+            </div>
+            <div class="row">&nbsp;</div>
+
+            <div class="col-md-offset-4 col-md-7">
+                <input id="sub" type="submit"
+                class="btn green btn-xs" onclick="sub()" value="提交"> <input type="reset"
+            onclick="hideFormDiv();" class="btn default btn-xs" value="关闭">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showAuthorityTree(id,name){
+       $("#id").val(id);
+       $.post('authorityTree',{roleId:id},function(data){
+           $('#authorityTree').jstree({
+            "core" : {
+                "themes" : {
+                    "responsive": false
+                },
+              "data" : data
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-gray icon-lg"
+                },
+                "root" : {
+                    "icon" : "fa fa-folder icon-state-danger icon-lg"
+                }
+            },
+            'plugins': ["wholerow", "checkbox", "types"],
+            "checkbox" : {"three_state" : false }
+        }).bind("activate_node.jstree", function (obj, e) {
+            // 处理代码
+            // 获取当前节点
+            var currentNode = e.node;
+            console.log(currentNode);
+            if(currentNode.state.selected==true){
+                if(currentNode.parents.length>0){
+                    $("#authorityTree").jstree("check_node",currentNode.parents);
+                }
+                if(currentNode.children_d.length>0){
+                    $("#authorityTree").jstree("check_node",currentNode.children_d);
+                }
+            }else{
+                 if(currentNode.children_d.length>0){
+                    $("#authorityTree").jstree("uncheck_node",currentNode.children_d);
+                }
+            }
+        });
+       });
+        $("#authorityTreeDiv").toggle('slow');
+        $("#smallTitle").html(name);
+    }
+     function hideFormDiv(){
+       $("#authorityTreeDiv").hide();
+       $('#authorityTree').jstree().destroy();
+    }
+    function sub(){
+        var roleId=$("#id").val();
+        var authIds= $('#authorityTree').jstree().get_checked();
+         hideFormDiv();
+         $("#loading").show();
+         $.post('roleAuthAdd',{roleId:roleId,authIds:authIds},function(data){
+            tipInfo(data);
+             $("#loading").hide();
+        });
+      }
+</script>

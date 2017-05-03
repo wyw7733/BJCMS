@@ -1,0 +1,117 @@
+<script type="text/javascript">
+        $(document).ready(function () {  
+            // 定义数据格式
+            var source =
+            {
+                dataType: "json",
+                dataFields: [
+                    { name: 'id', type: 'string' },
+                    { name: 'type_id', type: 'stirng' },
+                    { name: 'name', type: 'string' },
+                    { name: "memo", type: "string" },
+                    { name: "showtype", type: "string" },
+                    { name: "parent", type: "string" }
+                ],
+                hierarchy:
+                {
+                    keyDataField: { name: 'id' },
+                    parentDataField: { name: 'parent' }
+                },
+                id: 'id',
+                url:'columnList'
+            };
+            var dataAdapter = new $.jqx.dataAdapter(source);
+            // create Tree Grid
+            $("#treeGrid_column").jqxTreeGrid(
+            {  
+ 	                width: '99%',
+ 	                source: dataAdapter, 
+ 	                altRows: true,
+ 	                theme: 'energyblue',
+ 	              	ready: function()
+	                {
+	                 //展开全部
+ 	              		$("#treeGrid_column").jqxTreeGrid('expandAll');
+                     //展开新闻列
+                    //    $("#treeGrid_column").jqxTreeGrid('expandRow', '6C6C05EB74584415AE607A5FE9C8062B);
+	                },
+                    columns: [
+                              { text: '栏目名称', editable: false, dataField: 'name', width: '20%',
+                                cellsRenderer: function (row, column, value) {
+                                      if(value=='新闻'||value=='视频'||value=='图库'||value=='下载'||value=='专栏'){
+                                            return '<b style="color: #416db4">'+value+'</b>';
+                                      }
+                                      return value;
+                                  }
+                               },
+                              { text: '栏目简介', editable: false,dataField: 'memo', width: '50%'},
+                              { text: '状态', editable: false, dataField: 'showtype', width: '10%',cellsAlign: 'center', align: "center",
+                                cellsRenderer: function (row, column, value,rowData) {
+                                       var str='';
+                                       if(rowData.showtype=='0'){
+                                            str='显示';
+                                       }else if(rowData.showtype=='1'){
+                                            str='不显示';
+                                       }
+                                      return str;
+                                  }},
+                              {
+                                  text: '编辑', cellsAlign: 'center', align: "center", columnType: 'none', editable: false, sortable: false, dataField: null,
+                                   cellsRenderer: function (row, column, value,rowData) {
+                                       var str='<a onclick=ajaxLoad_index("content-body-div","toColumnAdd",{"type_id":"'+rowData.type_id+'","id":"'+row+'"},this)>添加子栏目</a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                                       str+='<a onclick=ajaxLoad_index("content-body-div","toColunmModify?id='+row+'",null,this)>修改</a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                                       str+='<a onclick=delectColumn("'+row+'")>删除</a>';
+                                       if(rowData.name=='新闻'||rowData.name=='视频'||rowData.name=='图库'||rowData.name=='下载'||rowData.name=='专栏'){
+                                            str='';
+                                       }
+                                      return str;
+                                  }
+                              }
+                            ]
+            });
+        });
+        function columnDelete(id){
+            $.post('columnDelete?id='+id,null,function(data){
+                tipInfo(data);
+                if(data=='删除成功！'){
+                    ajaxLoad_index('content-body-div','columnIndex',null,this);
+                }
+            });
+        }
+    </script>
+<div class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success"
+        onclick="ajaxLoad_index('content-body-div','toColumnAdd',null,this)">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;添加栏目
+        </a>
+        <div class="row">&nbsp;</div>
+        <div id="treeGrid_column">
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+        <div class="modal-header"style="height: 30%;border: 0px;"></div>
+        <div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+            <p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+        </div>
+    </div>
+</div>
+<script>
+    function delectColumn(id){
+        bootbox.confirm("确定删除?", function(result){
+            if(result==true){
+                $("#loadingDiv").show();
+                $.post('columnDelete',{'id':id},function(data){
+                    if(data=='删除成功！'){
+                        ajaxLoad_index('content-body-div','columnIndex',null,this);
+                    }
+                    tipInfo(data);
+                    $("#loadingDiv").hide();
+                });
+             }
+        });
+    }
+ </script>
+	

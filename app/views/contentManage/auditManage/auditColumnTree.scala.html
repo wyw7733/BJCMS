@@ -1,0 +1,118 @@
+<style>
+.icon-gray { color : #c9c9c9 ; }
+</style>
+<div class="row">
+    <div class="col-md-2">
+        <div id="columnTree" class="tree-demo" style="width : 100% ; padding-top : 5px ; margin-left : -10px ;"></div>
+    </div>
+    <input type="hidden" name="column_id" id="column_idSelect1" />
+    <div id="column-div" class="col-md-10" style="margin-left : 0px ; overflow-x: hidden;"></div>
+</div>
+<script>
+   var row=null;
+   jQuery(document).ready(function() {
+        ajaxLoad_index('column-div','auditContentList',null,this);
+        $('#columnTree').jstree({
+            "core" : {
+                "themes" : {
+                    "responsive": false
+                },
+              "data" : {
+                    "url" : "selectTree"
+                }
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-gray icon-lg"
+                },
+                "root" : {
+                    "icon" : "fa fa-folder icon-state-danger icon-lg"
+
+                }
+            },
+            "plugins": ["types"]
+        });
+
+        $('#columnTree').on('select_node.jstree', function(e,data) {
+            if(data.node.parent != "#") {
+                row=data;
+                $("#column_idSelect1").val(row.node.id);
+                ajaxLoad('column-div',"auditContentList?column_id="+data.node.id,null,this);
+            } else{
+                $("#column_idSelect1").val("");
+            }
+        });
+
+   });
+</script>
+
+@* 审核提示框 div*@
+<div class="container">
+    <div id="auditMessageDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+        <div class="modal-header"style="height: 25%;border: 0px;"></div>
+        <div class="modal-body" style="background: white;border: 5px powderblue solid;width:30%; margin: auto;padding: 0px;">
+            <div class="info"  style="width: 100%;background: #D9EDF7;color:#31709F;padding:5px;">
+                <span style="font-weight: bold;font-size: 15px;">取消审核</span>
+            </div>
+            <form id="myFormInput2" class="form-horizontal" method="post">
+            <div style="margin-left: 5%; margin-top: 5%; margin-bottom: 5%;width: 90%;overflow-x: hidden;overflow-y: hidden;border: 2px skyblue dotted;">
+                    <input id="id" name="id" type="hidden" value="">
+                    <input name="audit" type="hidden" value="2">
+                        <label style="margin-left:5%;">未通过原因: <span style="color:red;">(请认真填写!)</span></label><br>
+                        <textarea id="content" name="auditopinion" rows="5" style="margin-left:5%;width: 70%" class="form-control" placeholder="内容"> </textarea>
+                        <div class="row">&nbsp;</div>
+            </div>
+                <div class="form-actions">
+                    <div class="col-md-offset-4 col-md-7">
+                        <input id="sub" type="submit"
+                        class="btn green btn-xs" value="保 存"> <input type="reset"
+                    onclick="hideForm();" class="btn default btn-xs" value="取 消">
+                    </div>
+                </div>
+            </form>
+            <div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
+        </div>
+    </div>
+</div>
+<script>
+    function showAuditMessage(id){
+        $("#id").val(id);
+        $("#auditMessageDiv").toggle('slow');
+    }
+     function hideForm(){
+       $("#auditMessageDiv").hide();
+    }
+    $(function(){
+		 var options = {
+				url:'auditContentUnPass',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+		     if($("#content").val().trim() == '') {
+		        tipInfo("请填写原因");
+		        return false;
+		     } else if($("#content").val().trim().charCodeAt(0) <255) {
+		        tipInfo("首字母请输入汉字");
+		        return false;
+		     }
+			 $(this).ajaxSubmit(options);
+				 return false;
+		 });
+	});
+
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		hideForm();
+		ajaxLoad_index('column-div','auditContentList',null,this);
+	}
+</script>
+
+

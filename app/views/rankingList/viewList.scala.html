@@ -1,0 +1,190 @@
+@(page:Page,path:String)
+<div class="row">
+	<div class="col-lg-12">
+		<table class="table table-bordered table-striped" >
+			<tr class="info">
+				<th width="40%">标题</th>
+				<th width="19%">栏目</th>
+				<th width="10%">发布者</th>
+				<th width="7%">总点击</th>
+				@if(!path.endsWith("/views")){
+					<th width="7%">
+						@if(path.endsWith("/viewsday")){
+							日点击
+						}
+						@if(path.endsWith("/viewsweek")){
+							周点击
+						}
+						@if(path.endsWith("/viewsmonth")){
+							月点击
+						}
+
+
+					</th>
+				}
+
+				<th width="10%">发布时间</th>
+				<th width="8%">状态</th>
+				</tr>
+			<tbody id="tbody1">
+			@for(sqlrow <-page.list){
+				<tr>
+					<td>@sqlrow.get("title")</td>
+					<td>@sqlrow.get("name")</td>
+					<td>@sqlrow.get("username")</td>
+					<td>
+					@if(null==sqlrow.get("views")||sqlrow.get("views").equals("")){
+						0
+					}else{
+						@sqlrow.get("views")
+					}
+					</td>
+
+
+
+					@if(!path.endsWith("/views")){
+						<td>
+							@if(path.endsWith("/viewsday")){
+
+								@if(null==sqlrow.get("viewsday")||sqlrow.get("viewsday").equals("")){
+									0
+								}else{
+									@sqlrow.get("viewsday")
+								}
+							}
+							@if(path.endsWith("/viewsweek")){
+
+
+								@if(null==sqlrow.get("viewsweek")||sqlrow.get("viewsweek").equals("")){
+									0
+								}else{
+									@sqlrow.get("viewsweek")
+								}
+							}
+							@if(path.endsWith("/viewsmonth")){
+								@if(null==sqlrow.get("viewsmonth")||sqlrow.get("viewsmonth").equals("")){
+									0
+								}else{
+									@sqlrow.get("viewsmonth")
+								}
+							}
+
+
+						</td>
+					}
+					<td>@sqlrow.getTimestamp("releasetime").format("yyyy-MM-dd")</td>
+
+					<td>
+						@if(sqlrow.get("audit1").equals("0")){
+							审核中
+						}
+						@if(sqlrow.get("audit1").equals("1")){
+							审核通过
+						}
+						@if(sqlrow.get("audit1").equals("2")){
+							审核不通过
+						}
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+	</div>
+
+	<p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';display: none;"><img src='@routes.Assets.at("images/loading.gif")'> 数据加载中，请稍后</p>
+	@if(page.list != null && page.list.size() > 0) {
+		<div class="col-lg-12" onclick="showmore()" id="showmoreBtn">
+			<p class="btn blue" style="width : 100% ; font-weight : bold ;" href="javascript:;">
+				点击加载更多&nbsp;&nbsp;<i class="fa fa-search"></i>
+			</p>
+		</div>
+	}
+</div>
+
+
+<script>
+	var path='@path';
+	var page=2;
+	var column_id=$('#column_id').combotree("getValue");
+	var content_id=$("#content_id").val();
+	function showmore(){
+		$('#loading').show();
+		var param={
+				'path':path,
+				'column_id':column_id,
+				'content_id':content_id,
+				'pageNum':page,
+				'pageSize':10
+			};
+		$.ajax({
+		            type: "POST",
+		            url: "viewsDayListByPage",
+		            data: param,
+		            dataType: "json",
+		            success: function (data) {
+		            	$('#loading').hide();
+		            	var list=data.list;
+		           		if(data==null||list==null||list=='' ){
+		            	    tipInfo('没有更多数据了');
+		            	    return;
+		           		}
+		            	for(var i=0;i<list.length;i++){
+							var str="<tr><td>"+list[i].title+"</td>";
+							str+="<td>"+list[i].name+"</td>";
+							str+="<td>"+list[i].username+"</td>";
+							str+="<td>";
+							if(null==list[i].views||''==list[i].views){
+								str+="0"
+							}else{
+								str+=list[i].views;
+							}
+							str+="</td>";
+							if(path!='/views'){
+								str+="<td>";
+								if(path=='/viewsday'){
+									if(null==list[i].viewsday||''==list[i].viewsday){
+										str+="0";
+									}else{
+										str+=list[i].viewsday;
+									}
+								}
+								if(path=='/viewsweek'){
+									if(null==list[i].viewsweek||''==list[i].viewsweek){
+										str+="0";
+									}else{
+										str+=list[i].viewsweek;
+									}
+								}
+								if(path=='/viewsmonth'){
+									if(null==list[i].viewsmonth||''==list[i].viewsmonth){
+										str+="0";
+									}else{
+										str+=list[i].viewsmonth;
+									}
+								}
+								str+="</td>";
+							}
+							str+="<td>"+list[i].releasetime+"</td>";
+							str+="<td>";
+							if('0'==list[i].audit1){
+								str+="审核中";
+							}
+							if('1'==list[i].audit1){
+								str+="审核通过";
+							}
+							if('2'==list[i].audit1){
+								str+="审核不通过";
+							}
+							str+="</td>";
+
+				            $('#tbody1').append(str);
+			            }
+			            page++;
+		            },
+		            error: function (msg) {
+		            	$('#loading').hide();
+		            	tipInfo("数据加载异常！");
+		            }
+		        });
+	}
+</script>

@@ -1,0 +1,33 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom tabbable-full-width portlet light" style="min-height:500px">
+            <ul id="enterpriseUl" class="nav nav-tabs">
+                <li class="active">
+                    <a onclick="privateAjaxLoad('articleSourceContent','articleSourceList',null,this,null);" href="javascript:void(0);">
+					文章来源管理
+                    </a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('articleSourceContent','toArticleSourceAdd',null,this,null);" href="javascript:void(0);">
+					新增来源</a>
+                </li>
+
+            </ul>
+            <div  class="tab-content" id="articleSourceContent">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	fixMenu();
+	privateAjaxLoad('articleSourceContent','articleSourceList',null,this,null);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+
+</script>

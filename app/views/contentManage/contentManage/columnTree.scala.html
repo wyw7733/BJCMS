@@ -1,0 +1,51 @@
+<style>
+.icon-gray { color : #c9c9c9 ; }
+</style>
+<div class="row" >
+    <div class="col-md-2">
+        <div id="columnTree" class="tree-demo" style="width : 100% ; padding-top : 5px ; margin-left : -10px ;"></div>
+    </div>
+    <input type="hidden" name="column_id" id="column_idSelect1" />
+    <div id="column-div" class="col-md-10" style="margin-left : 0px ; overflow-x: hidden; "></div>
+</div>
+<script>
+   var row=null;
+   jQuery(document).ready(function() {
+        ajaxLoad_index('column-div','contentList',null,this);
+        $('#columnTree').jstree({
+            "core" : {
+                "themes" : {
+                    "responsive": false
+                },
+              "data" : {
+                    "url" : "selectTree"
+                }
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-gray icon-lg"
+                },
+                "root" : {
+                    "icon" : "fa fa-folder icon-state-danger icon-lg"
+
+                }
+            },
+            "plugins": ["types"]
+        });
+
+        $('#columnTree').on('select_node.jstree', function(e,data) {
+            if(data.node.parent != "#") {
+                row=data;
+                $("#column_idSelect1").val(row.node.id);
+                ajaxLoad('column-div',"contentList?column_id="+data.node.id,null,this);
+            } else{
+                $("#column_idSelect1").val("");
+            }
+        });
+
+   });
+</script>
+

@@ -1,0 +1,62 @@
+﻿body
+{
+	font: 14px "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+	color:#282829;
+	margin:0;
+	padding:0;
+}
+dl,dt,dd
+{
+	margin:0;
+	padding:0;
+}
+ul,li,p,h1,h2,h3,h4,h5,h6
+{
+	margin:0;
+	padding:0;
+	list-style:none;
+	border:none;
+}
+table{
+	border-collapse: collapse;
+}
+input
+{
+	border:none;
+}
+.lt
+{
+	float:left;
+}
+.rt
+{
+	float:right;
+}
+.clear
+{
+	clear:both;
+}
+a,u,b i
+{
+	text-decoration:none;
+	font-weight:normal;
+	font-style:normal;
+	display:inline-block;
+}
+b
+{
+	font-weight:normal;
+}
+i
+{
+	font-style:normal;
+}
+u,s
+{
+	text-decoration:none;
+}
+/*兼容处理*/
+/* 图片的边框问题 */
+img{
+	border-style:none;
+}

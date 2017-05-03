@@ -1,0 +1,84 @@
+@(dept:Dept)
+<div class="row">
+	<div class="col-lg-12">
+		<span style="color: black; font-weight: bold; font-size: 16px;">
+			<i class="fa fa-edit"></i>&nbsp;&nbsp;修改部门
+		</span> &nbsp;&nbsp;| <a class="btn" style="color: gray;"
+	onclick="ajaxLoad_index('content-body-div','deptIndex',null,this)">
+		<i class="fa fa-reply"></i>&nbsp;&nbsp;返回部门列表
+	</a>
+		<hr style="border-bottom: 1px solid #89C4F4; margin-top: 5px;">
+		<form class="form-horizontal" id="myFormInput2" method="post">
+			<input type="hidden" name="id" value="@dept.id" />
+			<div class="form-body">
+				<div class="form-group">
+					<label class="col-md-2 control-label">父级部门&nbsp;&nbsp;</label>
+					<div class="col-md-6">
+						<select id="parent" name="parent" style="width: 100%;height: 35px;" data-options="url:'selectDeptJsonTree',method:'get',
+						onSelect:function(node){
+                            var id= node.id;
+                            $('#parent').combotree('setValue',id);
+                           },
+                           onLoadSuccess:function(){
+							$('#parent').combotree('setValue','@dept.parent');
+							}
+
+                        ">
+						</select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">部门名称<span
+					class="required">*</span></label>
+					<div class="col-md-6">
+						<input type="text" class="form-control" name="name" required value="@dept.name" placeholder="部门名称" />
+						<span class="help-block">提示信息</span>
+					</div>
+				</div>
+
+			</div>
+			<div class="form-actions">
+				<div class="col-md-offset-4 col-md-7">
+					<input id="sub" type="submit"
+					class="btn green" value="提交">  <input type="button" onclick="ajaxLoad_index('content-body-div','deptIndex',null,this)"
+				class="btn default" value="关 闭">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="container">
+	<div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+		<div class="modal-header"style="height: 30%;border: 0px;"></div>
+		<div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+			<p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+		</div>
+	</div>
+</div>
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+	$(function(){
+	$('#parent').combotree({
+    });
+		 var options = {
+				url:'deptModify',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+			 $("#loadingDiv").show();
+			 $(this).ajaxSubmit(options);
+			 return false;
+		 });
+	});
+
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		ajaxLoad_index('content-body-div','deptIndex',null,this);
+		 $("#loadingDiv").hide();
+	}
+
+</script>

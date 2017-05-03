@@ -1,0 +1,772 @@
+@import com.avaje.ebean.SqlRow
+@(site:Site, adminUser:AdminUser,authList:List[Authority],contentNewest:List[SqlRow],lastlogintime:String,lastloginip:String)
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="utf-8" />
+        <title>陕西省公安厅居民身份证制证中心后台管理系统</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta content="" name="description" />
+        <meta content="" name="author" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=8">
+        <meta http-equiv="Expires" content="0">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-control" content="no-cache">
+        <meta http-equiv="Cache" content="no-cache">
+        <link rel="stylesheet" href="@routes.Assets.at("javascripts/kindeditor-4.1.10/themes/default/default.css")" />
+        <link rel="stylesheet" href="@routes.Assets.at("javascripts/kindeditor-4.1.10/plugins/code/prettify.css")"/>
+            <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="@routes.Assets.at("theme/assets/global/css/gfonts1.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/font-awesome/css/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/simple-line-icons/simple-line-icons.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/bootstrap/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/bootstrap/css/bootstrap.css")" rel="stylesheet" type="text/css" />
+
+        <link href="@routes.Assets.at("theme/assets/global/plugins/uniform/css/uniform.default.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jqvmap/jqvmap/jqvmap.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jstree11/themes/default/style.min.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jquery-notific8/jquery.notific8.min.css")" rel="stylesheet"/>
+            <!-- BEGIN PAGE LEVEL STYLES -->
+        <link href="@routes.Assets.at("theme/assets/global/plugins/fullcalendar/fullcalendar.min.css")" rel="stylesheet"/>
+            <!-- END PAGE LEVEL STYLES -->
+            <!-- END PAGE LEVEL PLUGIN STYLES -->
+            <!-- BEGIN PAGE STYLES -->
+        <link href="@routes.Assets.at("theme/assets/admin/pages/css/tasks.css")" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/select2/select2.css")"/>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css")"/>
+            <!-- END PAGE STYLES -->
+            <!-- BEGIN THEME STYLES -->
+            <!-- DOC: To use 'rounded corners' style just load 'components-rounded.css' stylesheet instead of 'components.css' in the below style tag -->
+        <link href="@routes.Assets.at("theme/assets/global/css/components.css")" id="style_components" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/global/css/plugins.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/admin/layout/css/layout.css")" rel="stylesheet" type="text/css" />
+        <link href="@routes.Assets.at("theme/assets/admin/layout/css/themes/default.css")" rel="stylesheet" type="text/css" id="style_color" />
+        <link href="@routes.Assets.at("theme/assets/admin/layout/css/custom.css")" rel="stylesheet" type="text/css" />
+            <!-- END THEME STYLES -->
+            <!-- BEGIN PAGE LEVEL STYLES -->
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datepicker/css/datepicker3.css")"/>
+        <link href="@routes.Assets.at("theme/assets/admin/pages/css/todo.css")" rel="stylesheet" type="text/css"/>
+        <link id="style_color" href="@routes.Assets.at("theme/assets/admin/layout/css/themes/darkblue.css")" rel="stylesheet" type="text/css"/>
+            <!-- END PAGE LEVEL STYLES -->
+            <!-- BEGIN PAGE LEVEL STYLES -->
+        <link href="@routes.Assets.at("theme/assets/admin/pages/css/inbox.css")" rel="stylesheet" type="text/css"/>
+            <!-- BEGIN:File Upload Plugin CSS files-->
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css")" rel="stylesheet"/>
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css")" rel="stylesheet"/>
+        <link href="@routes.Assets.at("theme/assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css")" rel="stylesheet"/>
+            <!-- END:File Upload Plugin CSS files-->
+            <!-- BEGIN PAGE LEVEL STYLES -->
+            <!-- 文本编辑器 -->
+        <link href="@routes.Assets.at("stylesheets/dropzone.css")" rel="stylesheet"/>
+
+            <!-- 文本编辑器 -->
+        <link rel="stylesheet" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css")" />
+
+        <link href="@routes.Assets.at("theme/assets/global/plugins/fancybox/source/jquery.fancybox.css")" rel="stylesheet"/>
+
+        <link href="@routes.Assets.at("theme/assets/admin/pages/css/timeline.css")" rel="stylesheet" type="text/css"/>
+
+
+        <link rel="stylesheet" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-table/src/bootstrap-table.css")"/>
+            <!-- treegrid -->
+        <link rel="stylesheet" href="@routes.Assets.at("theme/assets/global/plugins/jqwidgets/styles/jqx.base.css")" type="text/css" />
+        <link rel="stylesheet" href="@routes.Assets.at("theme/assets/global/plugins/jqwidgets/styles/jqx.energyblue.css")" type="text/css" />
+
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("javascripts/easy-ui/themes/bootstrap/easyui.css")">
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("javascripts/easy-ui/themes/icon.css")">
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css")" >
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.css")" >
+        <!--首页日历插件-->
+        <link rel="stylesheet" href="@routes.Assets.at("theme/assets/global/plugins/jqwidgets/styles/jqx.ui-lightness.css")" type="text/css" />
+
+        <style type="text/css">
+        html, body { height : 95 % ; padding : 0 px ; margin : 0 px ; }
+
+        </style>
+
+        <style type="text/css">
+        * {
+        font-family : 'Microsoft YaHei' ;
+        font-size : 14 px ;
+        }
+        </style>
+        <style type="text/css">
+        .a-black {
+        color : black ;
+        }
+        </style>
+            <!-- BEGIN PAGE LEVEL STYLES -->
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/bootstrap-select/bootstrap-select.min.css")"/>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/global/plugins/jquery-multi-select/css/multi-select.css")"/>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("theme/assets/admin/layout/css/animate.css")"/>
+
+    </head>
+    <body class="page-header-fixed page-quick-sidebar-over-content page-style-square page-sidebar-fixed page-container-bg-solid">
+            <!-- BEGIN HEADER -->
+        <div class="page-header navbar navbar-fixed-top" style="background-color : #2B3643">
+                <!-- BEGIN HEADER INNER -->
+            <div class="page-header-inner">
+                    <!-- BEGIN LOGO -->
+                <div class="page-logo">
+                      @*  <img src="@routes.Assets.at("images/top_logo.png")" alt="logo"
+                        class="logo-default" style="margin-top : -5px ;"/>*@
+                    <div class="menu-toggler sidebar-toggler hide">
+                            <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+                    </div>
+                </div>
+                    <!-- END LOGO -->
+                    <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+                <a href="javascript:void(0);" class="menu-toggler responsive-toggler"
+                data-toggle="collapse" data-target=".navbar-collapse"> </a>
+                    <!-- END RESPONSIVE MENU TOGGLER -->
+                    <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+                            <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <li class="dropdown dropdown-user"><a href="#"
+                        class="dropdown-toggle" data-toggle="dropdown"
+                        data-hover="dropdown" data-close-others="true"> <img id="adminUserImg"
+                        class="img-circle"
+                        src="@if(null == adminUser.image || "".equals(adminUser.image)) {
+                            @routes.Assets.at("theme/assets/global/img/login-user.png")
+                        } else {
+                            @site.dns@adminUser.image
+                        }" /> <span
+                        class="username username-hide-on-mobile"> @adminUser.name</span> <i
+                        class="fa fa-angle-down"></i>
+                        </a>
+                            <ul class="dropdown-menu">
+                                <li><a id="personalInfo" class="ajaxify" href="personalInfo?id=@adminUser.id"> <i class="icon-user"></i>
+                                    个人信息
+                                </a>
+                                </li>
+
+                                <li><a onclick="showForm('toModifyPwd',null);"> <i class="icon-lock"></i>
+                                    修改密码
+                                </a>
+                                </li>
+                                <li><a href="logout"> <i class="icon-key"></i>
+                                    退出登录
+
+                                </a>
+                                </li>
+                            </ul>
+                        </li>
+                            <!-- END USER LOGIN DROPDOWN -->
+                    </ul>
+                </div>
+                    <!-- END TOP NAVIGATION MENU -->
+            </div>
+                <!-- END HEADER INNER -->
+        </div>
+            <!-- END HEADER -->
+        <div class="clearfix"></div>
+            <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+                <!-- BEGIN SIDEBAR -->
+            <div class="page-sidebar-wrapper">
+                <div class="page-sidebar navbar-collapse collapse">
+                        <!-- BEGIN SIDEBAR MENU -->
+                    <ul class="page-sidebar-menu" data-keep-expanded="false"
+                    data-auto-scroll="true" data-slide-speed="200">
+                            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+
+                        <li class="sidebar-toggler-wrapper">
+                                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                            <div class="sidebar-toggler" style="margin-bottom : 20 px"></div> <!-- END SIDEBAR TOGGLER BUTTON -->
+                        </li>
+                        @for(parent <-authList){
+                            @if(parent.code.size==3){
+                                <li class="start">
+                                    <a href="javascript:void(0);">
+                                        @if(parent.name.contains("栏目")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/column.png")" >
+                                        }
+                                        @if(parent.name.contains("内容")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/content.png")" >
+                                        }
+                                        @if(parent.name.contains("模板")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/mobile.png")" >
+                                        }
+                                        @if(parent.name.contains("用户")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/adminuser.png")" >
+                                        }
+                                        @if(parent.name.contains("统计")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/count.png")" >
+                                        }
+                                        @if(parent.name.contains("系统")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/system.png")" >
+                                        }
+                                        @if(parent.name.contains("扩展")||parent.name.contains("排行")){
+                                                &nbsp;&nbsp;&nbsp;<img src="@routes.Assets.at("images/menu/expresstools.png")" >
+                                        }
+                                        <span class="title">@parent.name</span>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                    @for(child <-authList){
+                                        @if(child.code.indexOf(parent.code)==0&&child.code.size==6){
+                                            <li>
+                                                <a onclick="ajaxLoad_index('content-body-div','@child.action',null,this)">
+                                                    @if(parent.name.contains("统计管理")){
+                                                        @*<img src="@routes.Assets.at("images/menu/countchild.png")" >*@
+                                                        <i class="fa fa-bar-chart-o"></i>
+                                                    } else{
+                                                        @*  <img src="@routes.Assets.at("images/menu/childmenu.png")" >*@
+                                                        <i class="fa fa-joomla"></i>
+                                                    }
+                                                    @child.name</a>
+                                            </li>
+                                        }
+                                    }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                        <!-- END SIDEBAR MENU -->
+
+                </div>
+
+            </div>
+                <!-- END SIDEBAR -->
+
+
+                <!--***********************************页面内容部分开始************************************-->
+                <!-- BEGIN CONTENT -->
+            <div id="contentDiv" class="page-content-wrapper">
+                <div class="page-content" >
+                    <div id="content-body-div" class="page-content-body" >
+                            <!-- AJAX PAGE-->
+                        <style type="text/css">
+                        .lleft, .rright
+                        {
+                        margin-top:40px;
+                        }
+                        .lleft
+                        {
+
+                        background-color:#fff;
+                        padding:5px 20px;
+                        }
+                        .lleft h3
+                        {
+                        font-weight:800;
+                        color:#333;
+                        font-family : '微软雅黑' ;
+                        font-size:20px;
+                        }
+                        .info-content
+                        {
+                        width:100%;
+                        height:80px;
+                        padding:10px 0;
+                        border-top:1px solid #ddd;
+                        }
+                        .info-content .green, .info-content .blue, .info-content .purper
+                        {
+                        width:25px;height:25px;display:inline-block;text-align:center;line-height:25px;margin-right:10px;
+                        }
+                        .info-content .green1, .info-content .blue1, .info-content .purper1
+                        {
+                        font-size:14px;  font-weight:bold;
+                        }
+                        .info-content .green
+                        {
+                        background:#1DD3C0;
+                        }
+                        .info-content .green1
+                        {
+                        cursor:pointer;
+                        color:#1DD3C0;
+                        }
+                        .info-content .blue
+                        {
+                        background:deepskyblue;
+                        }
+                        .info-content .blue1
+                        {
+                        cursor:pointer;
+                        color:deepskyblue;
+                        }
+                        .info-content .purper
+                        {
+                        background:mediumpurple;
+                        }
+                        .info-content .purper1
+                        {
+                        cursor:pointer;
+                        color:mediumpurple;
+                        }
+
+
+                        .info-content  .time
+                        {
+                        margin-left:35px;
+                        }
+                        .info-content span{
+                        margin-right:5px;
+                        font-size:12px;
+                        }
+                        .rright
+                        {
+                        background-color:#10CFBD;
+                        color:#fff;
+                        padding-bottom:20px;
+                        }
+                        .rright p{
+                        margin-bottom:5px;
+                        font-size : 10px ;
+                        }
+
+                        </style>
+                        <div class="row" style="padding-left:45px;">
+                            <div class="col-lg-8 lleft">
+                                <h3>最新内容</h3>
+                                @for(content <-contentNewest){
+                                    <div class="info-content">
+
+                                        <p>
+                                            @if(content.getInteger("row_id")==1||content.getInteger("row_id")==4){
+                                                <span class="green">0@content.get("row_id")</span><span class="green1" title="@content.get("title")" onclick="previewContent('@content.get("id")')">
+                                                }
+                                            @if(content.getInteger("row_id")==2||content.getInteger("row_id")==5){
+                                                <span class="blue">0@content.get("row_id")</span><span class="blue1" title="@content.get("title")" onclick="previewContent('@content.get("id")')">
+                                                }
+                                            @if(content.getInteger("row_id")==3||content.getInteger("row_id")==6){
+                                                <span class="purper">0@content.get("row_id")</span><span class="purper1" title="@content.get("title")" onclick="previewContent('@content.get("id")')">
+                                                }
+
+                                            @if(content.getString("title").length>40){
+                                                @content.getString("title").toString().substring(0, 40)……
+                                            }else{
+                                                @content.get("title")
+                                            }
+                                        </span></p>
+                                        <p class="time"><span>发布人：</span><span style=" margin-right:15px;">@content.get("authorName")</span><span>发布时间：</span><span style=" margin-right:15px;"> @content.getTimestamp("releasetime").format("yyyy-MM-dd HH:mm")</span><span>浏览次数：</span><span>@content.get("readsize")</span>
+
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-lg-3" style="padding:0px;padding-left:10px;padding-right:1px;">
+                                <div class="rright" style=" width:100%;padding-left:10px;padding-right:10px;">
+                                    <div class="row" style="margin:0px auto;padding-top:30px;padding-bottom:20px;border-bottom:1px solid #fff">
+                                        <img class="img-circle" width="70px" height="70px" style="margin-right:10px;float:left;"
+                                        src="@if(null==adminUser.image||"".equals(adminUser.image)){
+                                            @routes.Assets.at("theme/assets/global/img/login-user.png")
+                                        } else{
+                                            @site.dns@adminUser.image
+                                        }" />
+                                        <div style="float:left;margin-top:20px;"><p>你好，<span>@adminUser.name</span></p>
+                                            <p>登入时间：@adminUser.logintime.format("yyyy-MM-dd HH:mm")</p>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin:0px auto">
+                                        <div style="margin:0px auto;MARGIN-TOP:15PX;LINE-HEIGHT:27PX;">
+                                            <p> 上次登录时间：
+                                                @if(lastlogintime!=null&&lastlogintime!=""){
+                                                    <span>@lastlogintime</span>
+                                                }
+                                            </p>
+                                            <p>上次登录IP：<span>@lastloginip</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id='jqxWidget'  style="width:100%;
+                                margin-top:20px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- END CONTENT -->
+                <!--***********************************页面内容部分结束************************************-->
+        </div>
+            <!-- 右侧form表单div-->
+        <div class="container">
+            <div id="publicForm" class="page-quick-sidebar-wrapper-form" style="background-color : #EFEFEF ; overflow-x : scroll ; overflow-y : scroll ;"></div>
+        </div>
+        <div class="container">
+            <div id="loadingDivIndex" class="modal fade in" style="background : url ( @routes.Assets.at("images/bg-white.png")) repeat ;">
+                <div class="modal-header" style="height : 30 % ; border : 0 px ;"></div>
+                <div class="modal-body" style="width : 40 % ; height : 65 % ; margin : auto ; border : 0 px ;">
+                    <p id="loading" style="text-align : center ; margin-top : 20 px ; font-family : '微软雅黑' ;"><img src='@routes.Assets.at("images/loading.gif")' >
+                        数据加载中，请稍后</p>
+                </div>
+            </div>
+        </div>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery-migrate.min.js")" type="text/javascript"></script>
+            <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap/js/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.blockui.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.cokie.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/uniform/jquery.uniform.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js")" type="text/javascript"></script>
+            <!-- END CORE PLUGINS -->
+            <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <script src="@routes.Assets.at("theme/assets/global/plugins/flot/jquery.flot.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/flot/jquery.flot.resize.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/flot/jquery.flot.categories.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.pulsate.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-daterangepicker/moment.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js")" type="text/javascript"></script>
+            <!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
+        <script src="@routes.Assets.at("theme/assets/global/plugins/moment.min.js")"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/fullcalendar/fullcalendar.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.sparkline.min.js")" type="text/javascript"></script>
+            <!-- END PAGE LEVEL PLUGINS -->
+            <!-- BEGIN PAGE LEVEL SCRIPTS -->
+        <script src="@routes.Assets.at("theme/assets/global/scripts/metronic.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/layout/scripts/layout.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/layout/scripts/quick-sidebar.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/layout/scripts/demo.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/index.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/tasks.js")" type="text/javascript"></script>
+
+            <!-- BEGIN PAGE PLUGINS & SCRIPTS -->
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js")"></script>
+
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js")" type="text/javascript"></script>
+
+            <!--树和表单验证 JS  -->
+
+        <script type="text/javascript"
+        src="@routes.Assets.at("theme/assets/global/plugins/jquery-validation/js/jquery.validate.min.js")"></script>
+
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/todo.js")" type="text/javascript"></script>
+            <!-- BEGIN: Page level plugins -->
+
+        <script src="@routes.Assets.at("theme/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js")" type="text/javascript"></script>
+
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js")" type="text/javascript"></script>
+
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jstree11/jstree.min.js")"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/ui-tree.js")"></script>
+
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/jquery.mockjax.js")"></script>
+
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/scripts/datatable.js")"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/form-editable.js")"></script>
+            <!-- 大日历控件js -->
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/calendar.js")"></script>
+            <!-- 小日历控件js -->
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/table-ajax.js")"></script>
+            <!-- BEGIN PAGE LEVEL PLUGINS -->
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-select/bootstrap-select.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js")"></script>
+            <!-- END PAGE LEVEL PLUGINS -->
+            <!-- END PAGE LEVEL SCRIPTS -->
+            <!-- 小文本编辑器js -->
+        <script type="text/javascript"
+        src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js")"></script>
+        <script type="text/javascript"
+        src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js")"></script>
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/form-validation.js")"></script>
+
+
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-table/src/bootstrap-table.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootbox/bootbox.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/jquery-notific8/jquery.notific8.min.js")"></script>
+
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("javascripts/diyUpload/css/webuploader.css")">
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("javascripts/diyUpload/css/diyUpload.css")">
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/diyUpload/js/webuploader.html5only.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/diyUpload/js/diyUpload.js")"></script>
+            <!-- echarts图表js -->
+        <script src="@routes.Assets.at("theme/assets/global/plugins/echarts/echarts.js")" type="text/javascript"></script>
+
+
+            <!-- treegrid -->
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/jqwidgets/jqx-all.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/jqwidgets/jqxcalendar.js")"></script>
+
+        <!--jqx 日期时间控件-->
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jqxdatetimeinput.js")"></script>
+            <!--jqx 文件上传控件-->
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/fileupload/jquery.fileupload.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/fileupload/jquery.iframe-transport.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/fileupload/jquery.ui.widget.js")"></script>
+
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-summernote/summernote.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/bootstrap-summernote/summernote.js")"></script>
+
+
+        <script src="@routes.Assets.at("theme/assets/admin/pages/scripts/components-dropdowns.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("theme/assets/global/plugins/select2/select2.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.form.js")"></script>
+            <!--百度文本编辑器-->
+        <script type="text/javascript" charset="utf-8" src="@routes.Assets.at("javascripts/ueditor/ueditor.config.js")"></script>
+        <script type="text/javascript" charset="utf-8" src="@routes.Assets.at("javascripts/ueditor/ueditor.all.js")"> </script>
+            <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+            <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+        <script type="text/javascript" charset="utf-8" src="@routes.Assets.at("javascripts/ueditor/lang/zh-cn/zh-cn.js")"></script>
+
+
+        <script charset="utf-8" src="@routes.Assets.at("javascripts/kindeditor-4.1.10/kindeditor.js")"></script>
+        <script charset="utf-8" src="@routes.Assets.at("javascripts/kindeditor-4.1.10/lang/zh_CN.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/easy-ui/js/jquery.easyui.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/easy-ui/js/easyui-lang-zh_CN.js")"></script>
+        <script type="text/javascript">
+		jQuery(document).ready(function() {
+		    history.forward();
+			Metronic.init(); // init metronic core componets
+			Layout.init(); // init layout
+			QuickSidebar.init(); // init quick sidebar
+			Demo.init(); // init demo features
+			Index.init();
+			fixMenu();
+
+			$("#jqxWidget").jqxCalendar({
+                height: '280',
+                theme: 'ui-lightness'});
+		});
+		//固定左侧菜单栏
+		function fixMenu(){
+			var body = $('body');
+			var sidebar = $('.page-sidebar');
+			var sidebarMenu = $('.page-sidebar-menu');
+			$(".sidebar-search", sidebar).removeClass("open");
+			body.removeClass("page-sidebar-closed");
+			sidebarMenu.removeClass("page-sidebar-menu-closed");
+			if ($.cookie) {
+				$.cookie('sidebar_closed', '0');
+			}
+			$(window).trigger('resize');
+		}
+		//最小化左侧菜单
+		function hideMenu(){
+			var body = $('body');
+			var sidebar = $('.page-sidebar');
+			var sidebarMenu = $('.page-sidebar-menu');
+			$(".sidebar-search", sidebar).removeClass("open");
+			body.addClass("page-sidebar-closed");
+			sidebarMenu.addClass("page-sidebar-menu-closed");
+			if (body.hasClass("page-sidebar-fixed")) {
+			    sidebarMenu.trigger("mouseleave");
+			}
+			$(window).trigger('resize');
+		}
+		//点击空白处关闭表单
+		$('.page-content').click(function(e) {
+			var isExist = $('body').hasClass('page-quick-sidebar-open-form');
+			if (isExist) {
+				var target = e.target;
+				if('DIV'===target.tagName){
+					$('body').removeClass('page-quick-sidebar-open-form');
+				}
+			}
+		});
+		//点击空白处关闭faq表单
+		  $('.page-content').click(function(e) {
+			var isExist = $('body').hasClass('page-quick-sidebar-wide-open-form');
+			if (isExist) {
+				var target = e.target;
+				if('DIV'===target.tagName){
+					$('body').removeClass('page-quick-sidebar-wide-open-form');
+				}
+			}
+		});
+		//显示右侧表单
+		function showForm(url,data) {
+			//qiao.bs.alert('这是一个提示');
+			removeForm();
+			ajaxLoad("publicForm",url,data);
+			$('body').addClass('page-quick-sidebar-open-form');
+		}
+		//显示右侧加宽表单
+		function showWideForm(url,data) {
+			removeForm();
+			ajaxLoad("wideForm",url,data);
+			$('body').addClass('page-quick-sidebar-wide-open-form');
+		}
+		//异步加载页面
+		function ajaxLoad(targetDiv,url,data){
+			removeForm();
+			Metronic.startPageLoading();
+			$('#'+targetDiv).load(url,data,function(response,status,xhr){
+				if(status!='success'){
+					$('#'+targetDiv).html('请求超时.');
+				}
+				Metronic.stopPageLoading();
+			});
+		}
+		//异步加载页面
+		function ajaxLoad1(targetDiv,url,data){
+			removeForm();
+
+            $("#loadingDivIndex").show();
+			$('#'+targetDiv).load(url,data,function(response,status,xhr){
+				if(status!='success'){
+					$('#'+targetDiv).html('请求超时.');
+				}
+				$("#loadingDivIndex").hide();
+			});
+
+		}
+		function ajaxLoad_index(targetDiv,url,data,obj){
+			Metronic.scrollTop();
+			ajaxLoad(targetDiv,url,data);
+			$(obj).parent().addClass('active').siblings().removeClass('active');
+		}
+		//移除右侧form
+		function removeForm() {
+			if($('body').hasClass('page-quick-sidebar-open-form')){
+				$('body').removeClass('page-quick-sidebar-open-form');
+				return;
+			}
+			if($('body').hasClass('page-quick-sidebar-wide-open-form')){
+				$('body').removeClass('page-quick-sidebar-wide-open-form');
+			}
+		}
+		//判断鼠标滑轮滚动方法
+		function appendData(end, $d, $c){
+			if(end){
+				var $d = $d || $(window);
+				var $c = $c || $(document);
+				$d.scroll(function(){if($d.scrollTop() + $d.height() >= $c.height()) end();});
+			}else{
+				$(window).scroll(null);
+			}
+		}
+		//消息提示框配置参数
+		var params = {
+			life : 3000,
+			theme : 'teal',
+			sticky : false,
+			horizontalEdge : 'bottom',
+			verticalEdge : 'right',
+			heading : '提示：'
+		};
+        //消息提示
+		function tipInfo(msg) {
+			$.notific8(msg, params);
+		}
+
+    //提交表单前验证
+		function showRequest() {
+			//取出错误状态的控件的个数
+			var isNot = $("#myFormInput2").find(".form-group.has-error").length;
+			if (isNot == 0) {
+				$("#myFormInput2Error").hide();
+				return true;
+			} else {
+				$("#myFormInput2Error").show();
+				return false;
+			}
+		}
+
+	var editor;
+	function addContent(){
+	    if(row!=null){
+	        $('#content-body-div').load('toContentAdd?id='+row.node.id,null,function(response,status,xhr){
+                KindEditor.ready(function(K) {
+                    editor = K.create('textarea[name="content111"]', {
+                        uploadJson : 'fileUploadImg',
+                        allowFileManager : true,
+                        afterCreate : function() {
+                            var self = this;
+                            K.ctrl(document, 13, function() {
+                                self.sync();
+                                document.forms['example'].submit();
+                            });
+                            K.ctrl(self.edit.doc, 13, function() {
+                                self.sync();
+                                document.forms['example'].submit();
+                            });
+                        }
+                    });
+                    prettyPrint();
+                });
+			});
+
+	    }else{
+		    $('#content-body-div').load('toContentAdd',null,function(response,status,xhr){
+                KindEditor.ready(function(K) {
+                    editor= K.create('textarea[name="content111"]', {
+                        uploadJson : 'fileUploadImg',
+                        allowFileManager : true,
+                        afterCreate : function() {
+                            var self = this;
+                            K.ctrl(document, 13, function() {
+                                self.sync();
+                                document.forms['example'].submit();
+                            });
+                            K.ctrl(self.edit.doc, 13, function() {
+                                self.sync();
+                                document.forms['example'].submit();
+                            });
+                        }
+                    });
+                    prettyPrint();
+                });
+		     });
+		}
+	}
+	 function delectConfirm(){
+        bootbox.confirm("确定删除?", function(result){
+            return result;
+        });
+    }
+
+    //处理键盘事件 禁止后退键（Backspace）密码或单行、多行文本框除外
+    function banBackSpace(e){
+        var ev = e || window.event;//获取event对象
+        var obj = ev.target || ev.srcElement;//获取事件源
+
+        var t = obj.type || obj.getAttribute('type');//获取事件源类型
+
+        //获取作为判断条件的事件类型
+        var vReadOnly = obj.getAttribute('readonly');
+        var vEnabled = obj.getAttribute('enabled');
+        //处理null值情况
+        vReadOnly = (vReadOnly == null) ? false : vReadOnly;
+        vEnabled = (vEnabled == null) ? true : vEnabled;
+
+        //当敲Backspace键时，事件源类型为密码或单行、多行文本的，
+        //并且readonly属性为true或enabled属性为false的，则退格键失效
+        var flag1=(ev.keyCode == 8 && (t=="password" || t=="text" || t=="textarea")
+                    && (vReadOnly==true || vEnabled!=true))?true:false;
+
+        //当敲Backspace键时，事件源类型非密码或单行、多行文本的，则退格键失效
+        var flag2=(ev.keyCode == 8 && t != "password" && t != "text" && t != "textarea")
+                    ?true:false;
+
+        //判断
+        if(flag2){
+            return false;
+        }
+        if(flag1){
+            return false;
+        }
+    }
+
+    //禁止后退键 作用于Firefox、Opera
+    document.onkeypress=banBackSpace;
+    //禁止后退键  作用于IE、Chrome
+    document.onkeydown=banBackSpace;
+    //预览
+     function  previewContent(id){
+	    $.post('previewContent',{'id':id},function(data){
+	        window.open(data);
+	    });
+	}
+    </script>
+    </body>
+</html>
+

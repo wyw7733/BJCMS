@@ -1,0 +1,46 @@
+@(site:Site,user:AdminUser)
+<div class="row">
+	<div class="col-md-12">
+		<div class="tabbable tabbable-custom tabbable-full-width portlet light"
+			style="padding-left: 5%;height: 580px;">
+
+			<div style="float: left;">
+				 <img
+					 class="img-circle" width="120px" height="120px"
+					src="@if(null==user.image||"".equals(user.image)){
+						@routes.Assets.at("theme/assets/global/img/login-user.png")
+					} else{
+						@site.dns@user.image
+					}"> <br>
+			</div>
+			<div
+				style="float: left; margin-top: 50px; margin-left: 30px; margin-bottom: 40px; font-size: 40px;">@user.name</div>
+			<div
+				style="float: right; margin-top: 60px; margin-right: 4%;">
+				<a class="btn btn-primary"
+					onclick="showForm('toUserInfoModify',{'id':'@user.id'})">修改信息</a>
+			</div>
+			<div class="row"></div>
+			<table class="table table-bordered table-hover" style="width: 96%;">
+				<tr>
+					<td width="110px" class="success">&nbsp;用户名：</td>
+					<td>&nbsp;@user.name</td>
+					<td width="110px" class="success">&nbsp;姓&nbsp;&nbsp;名：</td>
+					<td>&nbsp;@user.tname</td>
+				</tr>
+				<tr>
+					<td width="110px" class="success">&nbsp;电&nbsp;&nbsp;话：</td>
+					<td>&nbsp;@user.tel</td>
+					<td width="110px" class="success">&nbsp;邮&nbsp;&nbsp;箱：</td>
+					<td>&nbsp;@user.mail</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		removeForm();
+		fixMenu();
+	});
+</script>

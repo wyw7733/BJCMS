@@ -1,0 +1,129 @@
+@(message: String)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+        <title>政府网-登录页面</title>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("css/commen.css")"/>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("css/1.css")"/>
+        <link rel="stylesheet"
+        href="@routes.Assets.at("theme/assets/global/plugins/jquery-notific8/jquery.notific8.min.css")"
+        media="screen">
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/bootstrap/js/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("theme/assets/global/plugins/jquery-notific8/jquery.notific8.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.cookie.js")"></script>
+    </head>
+    <body style="background : #fff">
+        <div class="bg-login">
+            <div style="width : 100% ; height : 50px ;">
+                <img src="@routes.Assets.at("img/75.png")" alt=""/>
+            </div>
+            <div style="width : 100% ; height : 50px ; margin-top : 50px ;">
+                <img src="@routes.Assets.at("img/76.png")" alt=""/>
+            </div>
+        </div>
+        <form id="loginForm" action="login" method="post">
+            <div class="login-input">
+                <div>
+                    <img src="@routes.Assets.at("img/77.png")" alt="" class="lt">
+                    <input type="text" id="username" required name="name" placeholder="user" class="lt user" />
+                </div>
+
+                <div style="margin-top : 30px ;">
+                    <img src="@routes.Assets.at("img/78.png")" alt="" class="lt">
+                    <input type="password" id="password" required name="password" placeholder="password" class="lt password"/>
+                </div>
+                <div style="margin-top : 10px ;">
+                    <span class="lt remeber">
+                        <input type="checkbox" id="ck_rmbUser" style="vertical-align : -2px"/><b href="#">记住我的选择</b>
+                    </span>
+                    <span class="rt forget">
+                        <a href="">忘记密码</a>  | <a href="">注册</a>
+                    </span>
+                </div>
+                <div style="text-align : center">
+                    <img onclick="subform();" style="cursor: pointer;" src="@routes.Assets.at("img/79.png")" alt="">
+                </div>
+            </div>
+        </form>
+        <script>
+        //绑定回车事件
+          $(document).on('keyup',function(e){
+                  if(e.keyCode === 13){
+                       subform();
+                  }
+            });
+		jQuery(document).ready(function() {
+
+		    var message = "@message";
+            if(message!=""){
+
+                if(message=='true'){
+                    $("#tvery").val("");
+                    window.location.href="admin";
+
+                }else{
+                    tipInfo(message);
+                }
+		    }
+		    if ($.cookie("rmbUser") == "true") {
+                $("#ck_rmbUser").attr("checked", true);
+                $("#username").val($.cookie("username"));
+                $("#password").val($.cookie("password"));
+            }
+
+		 })
+		//消息提示框配置参数
+		var params = {
+		life : 2000,
+		theme : 'teal',
+		sticky : false,
+		horizontalEdge : 'bottom',
+		verticalEdge : 'right',
+		heading : '提示：',
+		zindex:9995
+
+		};
+		//消息提示
+		function tipInfo(msg) {
+		    $.notific8(msg, params);
+		}
+		function changeImg(obj){
+		    console.log(obj);
+		    var  src='verifyCode?radom='+new Date().getTime();
+		    $(obj).attr('src',src);
+		}
+		function subform(){
+		     var username=$('#username').val();
+             var password=$('#password').val();
+
+             if(username==null&&username.trim()==""){
+                 tipInfo("您输入的用户名为空！");
+                 return false;
+             }else if(password==null&&password.trim()==""){
+                 tipInfo("您输入的密码为空！");
+                 return false;
+             }
+             save();
+            $("#loginForm").submit();
+		}
+		//记住用户名密码
+        function save() {
+            if ($("#ck_rmbUser").is(':checked')) {
+                var str_username = $("#username").val();
+                var str_password = $("#password").val();
+                $.cookie("rmbUser", "true", { expires: 7 }); //存储一个带7天期限的cookie
+                $.cookie("username", str_username, { expires: 7 });
+                $.cookie("password", str_password, { expires: 7 });
+            }
+            else {
+                $.cookie("rmbUser", "false", { expire: -1 });
+                $.cookie("username", "", { expires: -1 });
+                $.cookie("password", "", { expires: -1 });
+            }
+        };
+		</script>
+    </body>
+</html>

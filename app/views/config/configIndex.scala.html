@@ -1,0 +1,42 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom tabbable-full-width portlet light" >
+            <ul id="enterpriseUl" class="nav nav-tabs">
+                <li class="active">
+                    <a onclick="privateAjaxLoad('configContent','configInfo',null,this);" href="javascript:void(0);">
+					全局配置
+                    </a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('configContent','siteInfo',null,this);" href="javascript:void(0);">
+					站点配置</a>
+                </li>
+                <li>
+                    <a onclick="privateAjaxLoad('configContent','emailConfig',null,this);"  href="javascript:void(0);">
+					邮件配置</a>
+                </li>
+            </ul>
+            <div  class="tab-content">
+                <div id="configContent" style="padding:10px">
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+	fixMenu();
+	privateAjaxLoad('configContent','configInfo',null,this,true);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	if(animate!=null){
+		$('#'+targetDiv).removeClass('animated bounceIn').hide();
+		$('#'+targetDiv).addClass('animated bounceIn').show();
+
+	}
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+
+</script>

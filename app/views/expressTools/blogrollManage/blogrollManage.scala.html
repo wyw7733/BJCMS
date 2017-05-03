@@ -1,0 +1,53 @@
+@(bgtList:List[BlogrollType],bgList:List[Blogroll])
+<div class="row">
+    <div class="col-lg-12" style="margin-top:3px;padding-left:0px">
+        <a class="btn btn-success" id="addBtn" style="float: right;margin-bottom: 5px;"
+        href="javascript:privateAjaxLoad('blogrollContent','toBlogrollAdd',null,this);">
+            <i class="fa fa-plus"></i>&nbsp;&nbsp;添加
+        </a>
+            <table class="table table-bordered" style="margin: 0px;">
+                <thead>
+                    <tr>
+                        <th style="width: 40%">连接名称</th>
+                        <th style="width: 45%">连接地址</th>
+                        <th style="width: 15%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(blogrollType <- bgtList){
+                        <tr class="info">
+                            <td colspan="3" height="20px;">@blogrollType.name</td>
+                        </tr>
+                        @for(blogroll <- bgList) {
+                            @if(blogrollType.id.equals(blogroll.type_id)){
+                                <tr>
+                                    <td>@blogroll.name</td>
+                                    <td>@blogroll.address</td>
+
+                                    <td><a href="javascript:privateAjaxLoad('blogrollContent','toBlogrollModify',{'id':'@blogroll.id'},this);">编辑</a>
+                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                        <a onclick="deleteBlogroll('@blogroll.id')">删除</a></td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+
+            </table>
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function() {
+		Pickers.init();//小日历控件初始化
+	});
+	function deleteBlogroll(id){
+        bootbox.confirm("确定删除?", function(result){
+           if(result==true){
+               $.post('blogrollDelete',{'id':id},function(data){
+                  tipInfo(data);
+                  privateAjaxLoad('blogrollContent','blogrollList',null,this,null);
+              });
+           }
+        });
+	}
+</script>

@@ -1,0 +1,113 @@
+@(columnList:List[Column],userList:List[AdminUser],yearList:List[String])
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <label class="col-lg-6 control-label">开始时间：</label>
+                    <div class="col-lg-6 input-group" >
+                        <input id="startyear" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="col-md-3" >
+                    <label class="col-lg-6 control-label">结束时间：</label>
+                    <div class="col-lg-6 input-group">
+                        <input id="endyear" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select id="column_id" name="column_id"  style="width: 100%;height: 35px;" data-options="url:'selectJsonTreeHasNullValue',method:'get',
+						onSelect:function(node){
+                            var id= node.id;
+                            $('#column_id').combotree('setValue',id);
+                           }
+                        ">
+                    </select>
+                </div>
+                <div class="col-md-2">
+                        <select class="form-control"  id="user_id">
+                            <option value="">-请选择用户-</option>
+                            @for(user <-userList){
+                                <option value="@user.id">@user.name</option>
+                            }
+                        </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input type="button" onclick="search()" class="btn green btn-circle" value="查询">
+                    </div>
+                </div>
+            </div>
+
+        </form>
+        <div  class="tab-content" id="workloadContent">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    $('#column_id').combotree({});
+	fixMenu();
+	//开始时间初始化
+	$('#startyear').datetimepicker({
+        	language: 'zh-CN',
+        	minView: 'year',
+        	startView: 'year',
+        	format: 'yyyy-mm',
+            autoclose: true,
+            keyboardNavigation: false,
+            todayBtn: true
+        });
+    //结束时间初始化
+    $('#endyear').datetimepicker({
+        	language: 'zh-CN',
+        	minView: 'year',
+        	startView: 'year',
+        	format: 'yyyy-mm',
+            autoclose: true,
+            keyboardNavigation: false,
+            todayBtn: true
+    });
+    var date=new Date()
+    var year=date.getFullYear();
+    var month=date.getMonth()+1;
+    $('#startyear').val(year+"-01");
+    if(month.length=1){
+        $('#endyear').val(year+"-0"+month);
+    }else{
+        $('#endyear').val(year+"-"+month);
+    }
+        var startyear=year+"01";
+        var endyear="";
+        if(month.length=1){
+         endyear=year+"0"+month;
+        }else{
+         endyear=year+month;
+        }
+        privateAjaxLoad('workloadContent','workloadContentList?startyear='+startyear+'&endyear='+endyear,null,this,null);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	if(animate!=null){
+		$('#'+targetDiv).removeClass('animated bounceIn').hide();
+		$('#'+targetDiv).addClass('animated bounceIn').show();
+
+	}
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+function search(){
+    var column_id=$('#column_id').combotree("getValue");
+    var startyear= $('#startyear').val();
+    startyear = startyear.replace(/-/g,'');
+    var endyear= $('#endyear').val();
+    endyear = endyear.replace(/-/g,'');
+    if(startyear > endyear){
+        tipInfo('开始时间不能大于结束时间！');
+        return false;
+    }
+    var user_id=$('#user_id').val();
+    var param='column_id='+column_id+'&startyear='+startyear+'&endyear='+endyear+'&user_id='+user_id;
+    privateAjaxLoad('workloadContent','workloadContentList?'+param,null,this,null);
+ }
+</script>

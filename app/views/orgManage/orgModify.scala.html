@@ -1,0 +1,174 @@
+@(organization:Organizations,site:Site)
+<div class="row">
+	<div class="col-lg-12">
+		<span style="color: black; font-weight: bold; font-size: 16px;">
+		<i class="fa fa-edit"></i>&nbsp;&nbsp;修改组织机构
+	</span> &nbsp;&nbsp;| <a class="btn" style="color: gray;"
+	onclick="ajaxLoad_index('content-body-div','organizationsIndex',null,this)">
+		<i class="fa fa-reply"></i>&nbsp;&nbsp;返回机构列表
+	</a>
+		<hr style="border-bottom: 1px solid #89C4F4; margin-top: 5px;">
+		<input type="hidden" id="leaderId" />
+		<form class="form-horizontal" id="myFormInput2" method="post" enctype="multipart/form-data">
+			<div class="form-body">
+				<i class="fa fa-gift font-green-sharp"></i>
+				<span class="caption-subject font-green-sharp bold">机构信息</span>
+				<hr>
+				<div class="form-group">
+					<label class="col-md-2 control-label">组织机构名称：&nbsp;&nbsp;</label>
+					<label class="col-md-4 control-label" style="text-align:left;padding-left:3%;">
+						@organization.name
+					<input type="hidden" name="orgId" value="@organization.id" />
+					</label>
+				</div>
+				<div class="form-group">
+					<label class="col-md-2 control-label">组织机构职责：&nbsp;&nbsp;</label>
+					<label class="col-md-4 control-label" style="text-align:left;padding-left:3%;">
+						<textarea  rows="5" name="dutymemo"  class="form-control" style="width:500px;"
+						placeholder="职责">@organization.dutymemo</textarea>
+
+					</label>
+				</div>
+
+				<i class="fa fa-gift font-green-sharp"></i>
+				<span class="caption-subject font-green-sharp bold">领导信息</span>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="tabbable tabbable-custom tabbable-full-width portlet light" style="min-height:500px">
+							<ul id="enterpriseUl" class="nav nav-tabs">
+								<li class="active">
+
+									<a onclick="privateAjaxLoad('leaderContent','leaderToAdd?type=1&id=@organization.id',null,this,null);" href="javascript:void(0);">
+								<!--	<a onclick="privateAjaxLoad('leaderContent','learderModify?type=1&id=@organization.id',null,this,null);" href="javascript:void(0);">-->
+									人员1
+									</a>
+								</li>
+								<li>
+									<a onclick="privateAjaxLoad('leaderContent','leaderToAdd?type=2&id=@organization.id',null,this,null);" href="javascript:void(0);">
+									人员2</a>
+								</li>
+							</ul>
+							<div  class="tab-content" id="leaderContent">
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+			<div class="form-actions">
+				<div class="col-md-offset-4 col-md-7">
+					<input  type="button" onclick="addLeader() "
+					class="btn green" value="提交">
+					<input type="button" onclick="delLeader()"
+					class="btn green" value="删除">
+					<input type="button" onclick="ajaxLoad_index('content-body-div','organizationsIndex',null,this)"
+				class="btn default" value="关 闭">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<div class="container">
+	<div id="loadingDiv" class="modal fade in" style="background: url(@routes.Assets.at("images/bg-white.png")) repeat;">
+		<div class="modal-header"style="height: 30%;border: 0px;"></div>
+		<div class="modal-body" style="width:40%;height: 65%; margin: auto;border: 0px;">
+			<p id="loading" style="text-align: center;margin-top:20px;font-family: '微软雅黑';"><img src='@routes.Assets.at("images/loading.gif")' > 数据加载中，请稍后</p>
+		</div>
+	</div>
+</div>
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+jQuery(document).ready(function() {
+	fixMenu();
+	privateAjaxLoad('leaderContent','leaderToAdd?type=1&id=@organization.id',null,this,null);
+});
+function privateAjaxLoad(targetDiv,url,data,obj,animate){
+	if(animate!=null){
+		$('#'+targetDiv).removeClass('animated bounceIn').hide();
+		$('#'+targetDiv).addClass('animated bounceIn').show();
+
+	}
+	ajaxLoad(targetDiv,url,data,obj);
+	$(obj).parent('li').addClass('active').siblings().removeClass('active');
+}
+	var url = "";
+	function addLeader() {
+		if($("#leadName").val() == "") {
+			tipInfo("请填写姓名！");
+			return false;
+		}
+	    url="leaderModify";
+		var id=$("#leaderId").val();
+		if(id==null||id==""){
+			url="leaderAdd";
+		}
+		$('#myFormInput2').submit();
+	}
+	$('#myFormInput2').submit(function() {
+		 var options = {
+			url:url,
+			beforeSubmit:  showRequest,  //提交前处理
+			success:       showResponse,  //处理完成
+			resetForm: false,
+			dataType:  'text'
+        };
+	 	$("#loadingDiv").show();
+        $(this).ajaxSubmit(options);
+        return false;
+	})
+	function delLeader() {
+		if($("#leaderId").val() == "") {
+			tipInfo("没有数据，不能删除");
+			return false;
+		}
+		bootbox.confirm("确定删除?", function(result){
+	        if(result){
+	            $.post('leaderDel',{'id':$("#leaderId").val()},function(data){
+                    tipInfo(data);
+                    if(data="删除成功！"){
+                       ajaxLoad_index('content-body-div','organizationsIndex',null,this);
+                    }
+	            });
+	        }
+	    });
+	}
+
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		ajaxLoad_index('content-body-div','organizationsIndex',null,this);
+		$("#loadingDiv").hide();
+	}
+	//点击file框，弹出选择文件框
+	function showFile() {
+		$("#fileEdit").click();
+	}
+	//获取本地图片显示
+	function getObjectURL(file) {
+		var url = null;
+		if (window.createObjectURL != undefined) { // basic
+			url = window.createObjectURL(file);
+		} else if (window.URL != undefined) { // mozilla(firefox)
+			url = window.URL.createObjectURL(file);
+		} else if (window.webkitURL != undefined) { // webkit or chrome
+			url = window.webkitURL.createObjectURL(file);
+		}
+		return url;
+	}
+	//判断图片格式是否正确
+	function checkImg(){
+		var filepath=$("#fileEdit").val();
+		var extStart=filepath.lastIndexOf(".");
+		var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+		if(ext!=".BMP"&&ext!=".PNG"&&ext!=".GIF"&&ext!=".JPG"&&ext!=".JPEG"){
+			tipInfo("不是有效的图片格式！");
+			return false;
+		}else{
+			return true;
+		}
+	}
+</script>

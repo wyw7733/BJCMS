@@ -1,0 +1,264 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /admin                             controllers.Application.admin()
+
+GET         /                                  controllers.Application.index()
+
+GET         /ueController/config               controllers.Application.ueConfig()
+POST        /ueController/:url                 controllers.Application.uePostAction(url: String)
+
+GET         /assets/*file                      controllers.Assets.at(path="/public", file)
+
+POST        /login                             controllers.LoginUserAction.login()
+GET         /logout                            controllers.LoginUserAction.logout()
+GET         /verifyCode                        controllers.VerifyCodeAction.verifyCode()
+
+GET         /loginWebsite                      controllers.WebsiteLoginUserAction.login()
+GET         /register                          controllers.UserAction.add()
+
+GET         /mobileIndex                       controllers.MobileAction.index()
+GET         /mobileList                        controllers.MobileAction.list(path)
+POST        /toMobileModify                    controllers.MobileAction.toModify()
+POST        /mobileAdd                         controllers.MobileAction.mobileAdd()
+POST        /mobileModify                      controllers.MobileAction.mobileModify()
+POST        /mobileDelete                      controllers.MobileAction.mobileDelete()
+GET         /toMobileAdd                       controllers.MobileAction.toMobileAdd()
+POST        /search                            controllers.MobileAction.search()
+
+GET         /mobileTypeIndex                   controllers.MobileTypeAction.index()
+GET         /mobileTypeList                    controllers.MobileTypeAction.list()
+POST        /mobileTypeDelete                  controllers.MobileTypeAction.delete()
+GET         /toMobileTypeAdd                   controllers.MobileTypeAction.toAdd()
+POST        /mobileTypeAdd                     controllers.MobileTypeAction.add()
+GET         /toMobileTypeModify                controllers.MobileTypeAction.toModify(id)
+POST        /mobileTypeModify                  controllers.MobileTypeAction.modify()
+GET         /find                              controllers.MobileTypeAction.find(query)
+
+GET         /columnTreeIndex                   controllers.ContentAction.contentColumnTree()
+GET         /contentList                       controllers.ContentAction.contentList()
+GET         /toContentAdd                      controllers.ContentAction.toContentAdd()
+GET         /selectTree                        controllers.ContentAction.selectTree()
+POST        /contentAdd                        controllers.ContentAction.add()
+POST        /contentDelete                     controllers.ContentAction.delete()
+GET         /toContentModify                   controllers.ContentAction.toModify()
+GET         /toContentDetail                   controllers.ContentAction.toDetail()
+POST        /contentModify                     controllers.ContentAction.modify()
+POST        /otherModify                       controllers.ContentAction.otherModify()
+POST        /searchContent                     controllers.ContentAction.search()
+#POST        /fileUpload                   controllers.ContentAction.fileUpload()
+#POST        /imgeUpload                   controllers.ContentAction.imgeUpload()
+GET         /selectListToJson                  controllers.ContentAction.selectListToJson()
+POST        /contentShow                       controllers.ContentAction.contentShow()
+POST        /linkageContentList                controllers.ContentAction.linkageContentList()
+POST        /contentListToJson                 controllers.ContentAction.contentListToJson()
+GET         /selectContentByPage               controllers.ContentAction.selectContentByPage()
+POST        /previewContent                    controllers.ContentAction.previewContent()
+
+
+GET         /auditManageIndex                  controllers.ContentAction.auditColumnTree()
+GET         /auditContentList                  controllers.ContentAction.auditContentList()
+POST        /searchAuditContent                controllers.ContentAction.searchAuditContent()
+POST        /auditContents                     controllers.ContentAction.auditContents()
+POST        /auditContentUnPass                controllers.ContentAction.auditContentUnPass()
+
+GET         /recycleBin                        controllers.ContentAction.recycleBin()
+POST        /recovery                          controllers.ContentAction.recovery()
+
+GET         /contentCommentList                controllers.ContentCommentAction.list()
+POST        /auditComments                     controllers.ContentCommentAction.auditComments()
+POST        /deleteComments                    controllers.ContentCommentAction.deleteComments()
+
+GET         /contentCountIndex                 controllers.ContentAction.contentCountIndex()
+GET         /countContentList                  controllers.ContentAction.countContentList()
+
+GET         /workloadCountIndex                controllers.ContentAction.workloadCountIndex()
+GET         /workloadContentList               controllers.ContentAction.workloadContentList()
+
+GET         /commentCountIndex                 controllers.ContentCommentAction.commentCountIndex()
+GET         /commentCountList                  controllers.ContentCommentAction.commentCountList()
+
+GET         /contentStatisticsIndex            controllers.ContentStatisticsAction.index()
+GET         /columnViews                       controllers.ContentStatisticsAction.list()
+GET         /columnViewsday                       controllers.ContentStatisticsAction.list()
+GET         /columnViewsweek                       controllers.ContentStatisticsAction.list()
+GET         /columnViewsmonth                       controllers.ContentStatisticsAction.list()
+
+
+
+GET         /viewsIndex                        controllers.ContentStatisticsAction.viewIndex()
+GET         /viewsdayIndex                     controllers.ContentStatisticsAction.viewIndex()
+GET         /viewsweekIndex                    controllers.ContentStatisticsAction.viewIndex()
+GET         /viewsmonthIndex                   controllers.ContentStatisticsAction.viewIndex()
+GET         /views                             controllers.ContentStatisticsAction.viewList()
+GET         /viewsday                          controllers.ContentStatisticsAction.viewList()
+GET         /viewsweek                         controllers.ContentStatisticsAction.viewList()
+GET         /viewsmonth                        controllers.ContentStatisticsAction.viewList()
+POST        /viewsDayListByPage                controllers.ContentStatisticsAction.viewsDayListByPage()
+
+
+GET         /columnList                        controllers.ColumnAction.columnList()
+GET         /toColumnAdd                       controllers.ColumnAction.toAdd()
+POST        /toColumnAdd                       controllers.ColumnAction.toAdd()
+GET         /toColunmModify                    controllers.ColumnAction.toModify(id)
+GET         /columnIndex                       controllers.ColumnAction.index()
+POST        /columnAdd                         controllers.ColumnAction.add()
+POST        /columnDelete                      controllers.ColumnAction.delete()
+POST        /columnModify                      controllers.ColumnAction.modify()
+POST        /linkageShowType                   controllers.ColumnAction.linkageShowType()
+GET         /selectColumnJsonTree              controllers.ColumnAction.selectColumnJsonTree()
+GET         /selectColumnJsonTreeDep              controllers.ColumnAction.selectColumnJsonTreeDep()
+GET         /selectJsonTreeHasNullValue        controllers.ColumnAction.selectJsonTreeHasNullValue()
+
+
+
+GET         /siteInfo                          controllers.SiteAction.siteInfo()
+POST        /siteUpdate                        controllers.SiteAction.update()
+
+GET         /emailConfig                       controllers.EmailAction.emailInfo()
+POST        /emailUpdate                       controllers.EmailAction.update()
+
+GET         /configIndex                       controllers.ConfigAction.index()
+GET         /configInfo                        controllers.ConfigAction.configInfo()
+POST        /configUpdate                      controllers.ConfigAction.update()
+
+GET         /roleIndex                         controllers.RoleAction.index()
+GET         /roleList                          controllers.RoleAction.list()
+GET         /toRoleAdd                         controllers.RoleAction.toRoleAdd()
+POST        /roleAdd                           controllers.RoleAction.add()
+POST        /toRoleModify                      controllers.RoleAction.toRoleModify()
+POST        /roleModify                        controllers.RoleAction.modify()
+POST        /roleDelete                        controllers.RoleAction.delete()
+POST        /roleAuthAdd                       controllers.RoleAction.roleAuthAdd()
+
+POST        /authorityTree                     controllers.AuthorityAction.selectTree()
+GET         /adminUserList                     controllers.AdminUserAction.list()
+GET         /adminUserIndex                    controllers.AdminUserAction.index()
+POST        /adminUserAdd                      controllers.AdminUserAction.add()
+GET         /toAdminUserAdd                    controllers.AdminUserAction.toAdd()
+POST        /toAdminUsersModify                controllers.AdminUserAction.toModify()
+POST        /adminUserModify                   controllers.AdminUserAction.modify()
+POST        /adminUserDelete                   controllers.AdminUserAction.delete()
+GET         /personalInfo                      controllers.AdminUserAction.personalInfo()
+GET         /toModifyPwd                       controllers.AdminUserAction.toModifyPwd()
+POST        /modifyPassword                    controllers.AdminUserAction.modifyPwd()
+POST        /toUserInfoModify                  controllers.AdminUserAction.toUserInfoModify()
+POST        /userInfoModify                    controllers.AdminUserAction.userInfoModify()
+POST        /adminUserFrozen                   controllers.AdminUserAction.frozen()
+POST        /initPassword                      controllers.AdminUserAction.initPassword()
+POST        /unfrozening                       controllers.AdminUserAction.unfrozening()
+
+GET         /deptIndex                         controllers.DeptAction.index()
+GET         /deptList                          controllers.DeptAction.list()
+POST        /deptAdd                           controllers.DeptAction.add()
+GET         /toDeptAdd                         controllers.DeptAction.toAdd()
+POST        /toDeptModify                      controllers.DeptAction.toModify()
+POST        /deptModify                        controllers.DeptAction.modify()
+POST        /deptDelete                        controllers.DeptAction.delete()
+GET         /selectDeptJsonTree                controllers.DeptAction.selectDeptJsonTree()
+POST        /selectJsTreeDept                  controllers.DeptAction.selectJsTreeDept()
+
+
+
+
+GET         /staticIndex                       controllers.StacicAction.staticIndex()
+
+POST        /generateIndex                     controllers.StacicAction.generateIndex()
+GET         /staticHtml                        controllers.StacicAction.staticHtml()
+POST        /generateColumn                    controllers.StacicAction.generateColumn()
+GET         /staticColumn                      controllers.StacicAction.staticColumn()
+POST        /generateContent                   controllers.StacicAction.generateContent()
+GET         /staticContent                     controllers.StacicAction.staticContent()
+
+
+GET         /staticIndex                       controllers.StacicAction.staticIndex()
+
+GET         /staticHtml                        controllers.StacicAction.staticHtml()
+POST        /generateIndex                     controllers.StacicAction.generateIndex()
+POST        /generateColumn                    controllers.StacicAction.generateColumn()
+GET         /staticColumn                      controllers.StacicAction.staticColumn()
+POST        /generateContent                   controllers.StacicAction.generateContent()
+GET         /staticContent                     controllers.StacicAction.staticContent()
+
+GET         /wordIndex                         controllers.SensitiveWordAction.wordIndex()
+GET         /wordManage                        controllers.SensitiveWordAction.wordManage()
+GET         /toWordAdd                         controllers.SensitiveWordAction.toWordAdd()
+POST        /wordAdd                           controllers.SensitiveWordAction.wordAdd()
+POST        /toWordModify                      controllers.SensitiveWordAction.toWordModify()
+POST        /wordModify                        controllers.SensitiveWordAction.wordModify()
+POST        /wordDelete                        controllers.SensitiveWordAction.wordDelete()
+
+
+GET         /articleSourceIndex                controllers.ArticleSourceAction.toSearch()
+GET         /articleSourceList                 controllers.ArticleSourceAction.searchList()
+GET         /toArticleSourceAdd                controllers.ArticleSourceAction.toAdd()
+POST        /articleSourceAdd                  controllers.ArticleSourceAction.add()
+POST        /toArticleSourceModify             controllers.ArticleSourceAction.toModify()
+POST        /articleSourceModify               controllers.ArticleSourceAction.modify()
+POST        /articleSourceDelete               controllers.ArticleSourceAction.delete()
+
+
+
+POST        /restartContent                    controllers.ContentAction.reStartTimer()
+
+
+GET         /contentReadsSizeMosify            controllers.ContentAction.contentReadsSizeMosify()
+
+GET         /sendMail                          controllers.SendMailAction.sendMail()
+
+
+GET         /blogrollIndex                      controllers.BlogrollAction.index()
+GET         /blogrollList                       controllers.BlogrollAction.list()
+GET         /toBlogrollAdd                      controllers.BlogrollAction.toAdd()
+POST        /blogrollAdd                        controllers.BlogrollAction.add()
+POST        /toBlogrollModify                   controllers.BlogrollAction.toModify()
+POST        /blogrollModify                     controllers.BlogrollAction.modify()
+POST        /blogrollDelete                     controllers.BlogrollAction.delete()
+GET         /blogrollListWeb                    controllers.BlogrollAction.blogrollListWeb()
+
+GET         /blogrollTypeList                   controllers.BlogrollTypeAction.list()
+GET         /toBlogrollTypeAdd                  controllers.BlogrollTypeAction.toAdd()
+POST        /blogrollTypeAdd                    controllers.BlogrollTypeAction.add()
+POST        /toBlogrollTypeModify               controllers.BlogrollTypeAction.toModify()
+POST        /blogrollTypeModify                 controllers.BlogrollTypeAction.modify()
+POST        /blogrollTypeDelete                 controllers.BlogrollTypeAction.delete()
+
+#GET         /organizationsIndex                 controllers.OrganizationAction.index()
+#GET         /organizationInfo                   controllers.OrganizationAction.organizationInfo()
+#GET         /organizationsList                  controllers.OrganizationAction.list()
+#POST        /orgAdd                             controllers.OrganizationAction.orgAdd()
+#POST        /orgModify                          controllers.OrganizationAction.orgModify()
+#原有领导管理，组织管理模块
+#GET         /toleaderAdd                        controllers.LeaderAction.leaderToAdd()
+#POST        /leaderAdd                          controllers.LeaderAction.leaderAdd()
+#GET         /toLeaderModify                     controllers.LeaderAction.toLeaderModify()
+#POST        /leaderModify                       controllers.LeaderAction.learderModify()
+#POST        /leaderDelete                        controllers.LeaderAction.leaderDelete()
+
+#GET         /leaderInfoWebSite                  controllers.LeaderAction.leaderInfoWebSite()
+#GET         /selectLeaderPage                   controllers.LeaderAction.selectLeaderPage()
+#GET         /selectLeaderWebSite                   controllers.LeaderAction.selectLeaderWebSite()
+
+
+GET        /conAccessorysDownloadWebsite        controllers.ContentAction.conAccessorysDownloadWebsite()
+#GET        /selectOrgInfoWebSite                controllers.OrganizationAction.selectOrgInfoWebSite()
+#常用链接
+GET        /useLinkIndex                        controllers.UseLinkAction.index()
+GET        /useLinkList                         controllers.UseLinkAction.list()
+GET        /toUseLinkPage                       controllers.UseLinkAction.toUseLinkPage()
+POST       /addUseLink                          controllers.UseLinkAction.addUseLink()
+POST       /toUpdatePage                        controllers.UseLinkAction.updatePage()
+POST       /updateUseLink                       controllers.UseLinkAction.updateUseLink()
+POST       /deleteUseLink                       controllers.UseLinkAction.deleteUseLink()
+#组织机构管理/领导管理
+GET         /organizationsIndex                 controllers.OrganizationsAction.index()
+GET         /organizationsList                  controllers.OrganizationsAction.list()
+POST        /toOrgModify                        controllers.OrganizationsAction.toModify()
+POST        /leaderModify                       controllers.LeaderAction.learderModify()
+GET         /leaderInfoWebSite                  controllers.LeaderAction.leaderInfoWebSite()
+GET         /selectLeaderPage                   controllers.LeaderAction.selectLeaderPage()
+GET         /leaderToAdd                        controllers.LeaderAction.leaderToAdd()
+POST        /leaderAdd                          controllers.OrganizationsAction.leaderAdd()
+POST        /leaderDel                          controllers.LeaderAction.delete()

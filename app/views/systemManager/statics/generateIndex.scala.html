@@ -1,0 +1,58 @@
+@(mobileList:List[Mobile])
+<div class="row">
+    <div class="col-md-12">
+            <!-- 列表开始-->
+        <div class="portlet-body" id="enterpriseForm">
+            <form id="myFormInput2" class="form-horizontal" method="post" >
+                    <!--表单主体-->
+                <div class="form-body">
+                    <div class="form-group ">
+                        <label class="col-md-2 control-label">模版</label>
+                        <div class="col-md-5">
+                            <select  name="column_id" class="form-control">
+                                @for(mobile <- mobileList){
+                                    <option value="@mobile.id">@mobile.name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                    <!--表单尾部-->
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-6">
+                            <input id="sub" type="submit" class="btn green"  value="&nbsp;&nbsp;&nbsp;提&nbsp;&nbsp;&nbsp;交&nbsp;&nbsp;&nbsp;">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="@routes.Assets.at("javascripts/formCheck.js")"></script>
+<script>
+	$(function(){
+		 var options = {
+				url:'generateIndex',
+				beforeSubmit:  showRequest,  //提交前处理
+				success:       showResponse,  //处理完成
+				resetForm: false,
+				dataType:  'text'
+		 };
+		$('#myFormInput2').submit(function() {
+		      $("#loadingDiv").show();
+			 $(this).ajaxSubmit(options);
+			 return false;
+		});
+	});
+	//提交表单后
+	function showResponse(result, statusText){
+		tipInfo(result);
+		$("#loadingDiv").hide();
+		if(result=="生成成功"){
+		    privateAjaxLoad('content','staticHtml',null,this,false);
+		}
+	}
+</script>
